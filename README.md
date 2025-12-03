@@ -50,7 +50,7 @@ npm run dev
 
 ## Live Demo
 
-You can try it live at: [Live Demo](https://quizmaker.vercel.app/)
+You can try it live at: [Live Demo](https://quizmakerproject.vercel.app/)
 
 To run the project:
 
