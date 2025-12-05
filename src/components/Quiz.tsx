@@ -24,10 +24,9 @@ type Props = {
     isRandom: boolean;
     take?: number;
     mode: { name: "click" } | { name: "type", answersAsSuggestions: boolean };
-    backgroundImage: string;
 };
 
-export default function Quiz({ allQuestions, isInfinite, isRandom, take, mode, backgroundImage }: Props) {
+export default function Quiz({ allQuestions, isInfinite, isRandom, take, mode }: Props) {
     const [currentQuestion, setCurrentQuestion] = useState(0);
     const [currentContent, setCurrentContent] = useState(0);
     const [playerStats, setPlayerStats] = useState({
@@ -147,10 +146,7 @@ export default function Quiz({ allQuestions, isInfinite, isRandom, take, mode, b
     }
 
     return (
-        <div
-            className="bg-cover bg-center h-screen"
-            style={{ backgroundImage: `url(${backgroundImage})` }}
-        >
+        <div>
             <Toaster position="top-right" />
             {
                 isFinished && (
