@@ -23,6 +23,7 @@ The project is still in development and the next updates are directed to the fol
 - [ ] Don't allow repeated questions
 - [ ] Creation form
 - [ ] Generation of quizzes with LLM
+- [ ] App available in English and Portuguese
 
 ## Prerequisites
 
