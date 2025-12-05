@@ -16,11 +16,13 @@ The project is still in development and the next updates are directed to the fol
 
 - [x] Quiz
 - [x] Create config form
-- [ ] Setup config modal
-- [ ] Remove explanation
+- [ ] Show explanation in a modal
 - [ ] Create a show answer option
-- [ ] Allow all types of contents in the answer
+- [ ] Allow all types of contents in the explanation
+- [ ] Support for Latex
 - [ ] Don't allow repeated questions
+- [ ] Creation form
+- [ ] Generation of quizzes with LLM
 
 ## Prerequisites
 
