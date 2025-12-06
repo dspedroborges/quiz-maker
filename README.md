@@ -16,11 +16,11 @@ The project is still in development and the next updates are directed to the fol
 
 - [x] Quiz
 - [x] Create config form
-- [ ] Show explanation in a modal
-- [ ] Create a show answer option
-- [ ] Allow all types of contents in the explanation
+- [x] Show explanation
+- [x] Create a show answer option
+- [x] Allow all types of contents in the explanation
 - [ ] Support for Latex
-- [ ] Don't allow repeated questions
+- [x] Don't allow repeated questions
 - [ ] Creation form
 - [ ] Generation of quizzes with LLM
 - [ ] App available in English and Portuguese
