@@ -11,8 +11,6 @@ function App() {
     isInfinite: false,
     isRandom: false,
     take: 0,
-    mode: "click",
-    answersAsSuggestions: false
   });
 
   return (
@@ -27,10 +25,6 @@ function App() {
             isInfinite={settingsState.isInfinite}
             isRandom={settingsState.isRandom}
             take={settingsState.take}
-            mode={{
-              name: settingsState.mode,
-              answersAsSuggestions: settingsState.answersAsSuggestions,
-            }}
           />
         ) : (
           <Settings onSubmit={(s: SettingsType) => {

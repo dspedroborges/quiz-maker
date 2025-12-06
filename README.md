@@ -8,7 +8,7 @@
 
 <img src="print.png" alt="Example image">
 
-> Quiz Maker is an web app that allows the user to create, play with quizzes and configurate them in multiple ways.
+> Quiz Maker is an web app that allows the user to create quizzes manually or by using LLM and play with them.
 
 ### Adjustments and improvements
 

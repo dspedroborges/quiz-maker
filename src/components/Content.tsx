@@ -1,4 +1,6 @@
-export default function Content({ content }: { content: { type: "text" | "image" | "audio" | "video" | "youtube", value: string } }) {
+import type { ContentType } from "./Quiz"
+
+export default function Content({ content }: { content: ContentType }) {
     return (
         <>
             {

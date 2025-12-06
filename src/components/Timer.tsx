@@ -17,17 +17,18 @@ export function Timer({ seconds, running, onFinish }: TimerProps) {
     if (!running) return;
 
     const id = setInterval(() => {
-      setTime(v => v - 1);
+      setTime(v => {
+        if (v <= 1) {
+          clearInterval(id);
+          onFinish();
+          return 0;
+        }
+        return v - 1;
+      });
     }, 1000);
 
     return () => clearInterval(id);
-  }, [running, seconds]);
-
-  useEffect(() => {
-    if (time === 0 && running) {
-      onFinish();
-    }
-  }, [time, running, onFinish]);
+  }, [running, seconds, onFinish]);
 
   return <span>{time}s</span>;
 }

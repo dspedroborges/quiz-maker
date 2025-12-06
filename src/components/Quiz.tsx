@@ -1,21 +1,26 @@
 import { useEffect, useRef, useState } from "react";
-import { BsCaretLeftFill, BsCaretRightFill, BsCheckCircle, BsQuestionCircle, BsSend } from "react-icons/bs";
+import { BsCaretLeftFill, BsCaretRightFill, BsCheckCircle, BsHandThumbsDown, BsHandThumbsUp, BsQuestionCircle, BsSend } from "react-icons/bs";
 import { toast, Toaster } from "sonner";
 import { normalizeString, shuffleArray } from "../utils/functions";
 import { DEFAULT_PALETTE } from "../utils/colors";
 import TopBar from "./TopBar";
 import Content from "./Content";
 
-type Question = {
+export type ContentType = { type: "text" | "image" | "audio" | "video" | "youtube", value: string };
+
+export type ModeType = { name: "click" } | { name: "type", answersAsSuggestions: boolean } | { name: "explanation" };
+
+export type Question = {
     category: string;
     preStatement: string;
     statement: string;
-    content: { type: "text" | "image" | "audio" | "video" | "youtube", value: string }[]; // it can be a youtube link, image, audio or video
+    content: ContentType[];
     options: string[];
     answer: string;
     time: number;
-    explanation: string; // it can be a youtube link, image, audio or video
+    explanation: ContentType;
     tips: string[];
+    mode: ModeType;
 };
 
 type Props = {
@@ -23,10 +28,9 @@ type Props = {
     isInfinite: boolean;
     isRandom: boolean;
     take?: number;
-    mode: { name: "click" } | { name: "type", answersAsSuggestions: boolean };
 };
 
-export default function Quiz({ allQuestions, isInfinite, isRandom, take, mode }: Props) {
+export default function Quiz({ allQuestions, isInfinite, isRandom, take }: Props) {
     const [currentQuestion, setCurrentQuestion] = useState(0);
     const [currentContent, setCurrentContent] = useState(0);
     const [playerStats, setPlayerStats] = useState({
@@ -37,9 +41,12 @@ export default function Quiz({ allQuestions, isInfinite, isRandom, take, mode }:
     const [isFinished, setIsFinished] = useState(false);
     const [questions, setQuestions] = useState<Question[]>(allQuestions);
     const [typedAnswer, setTypedAnswer] = useState("");
+    const [showExplanation, setShowExplanation] = useState(false);
     const inputRef = useRef<HTMLInputElement>(null);
     const buttonRef = useRef<HTMLButtonElement>(null);
     const contents = questions[currentQuestion].content;
+    // this state is to check if the user clicked on "I was right" or "I was wrong" before showing the button "Next question"
+    const [gaveAnswer, setGaveAnswer] = useState(false);
 
     useEffect(() => {
         let pool = [...questions];
@@ -55,7 +62,7 @@ export default function Quiz({ allQuestions, isInfinite, isRandom, take, mode }:
     }, [isFinished]);
 
     useEffect(() => {
-        if (mode.name !== "type") return;
+        if (questions[currentQuestion].mode.name !== "type") return;
 
         const handler = (e: KeyboardEvent) => {
             if (e.key === "Enter") {
@@ -67,7 +74,7 @@ export default function Quiz({ allQuestions, isInfinite, isRandom, take, mode }:
 
         window.addEventListener("keydown", handler);
         return () => window.removeEventListener("keydown", handler);
-    }, []);
+    }, [currentQuestion]);
 
     const playSound = (sound: string) => {
         const audio = new Audio(`/sound_effects/${sound}.wav`);
@@ -102,22 +109,25 @@ export default function Quiz({ allQuestions, isInfinite, isRandom, take, mode }:
         setCurrentContent(0);
         setTotalDone(totalDone + 1);
         setTypedAnswer("");
+        setShowExplanation(false);
+        setGaveAnswer(false);
     }
 
     const handleAnswer = (answer: string) => {
         if (isFinished) return;
 
         if (normalizeString(answer) == normalizeString(questions[currentQuestion].answer)) {
-            toast.success("Right!");
+            toast.success("Good job!");
             let totalRight = playerStats.totalRight + 1;
             let performance = (totalRight / (totalDone + 1) * 100).toFixed(2) + "%";
             playSound("right");
             setPlayerStats({ totalRight, performance })
         } else {
             playSound("wrong");
-            toast.error(`Wrong! ${questions[currentQuestion].explanation}`);
+            toast.error("Wrong answer!");
         }
-        handleNextQuestion();
+        setShowExplanation(true);
+        setGaveAnswer(true);
     }
 
     const getTotalQuestions = () => {
@@ -127,8 +137,8 @@ export default function Quiz({ allQuestions, isInfinite, isRandom, take, mode }:
     const handleTimeUp = () => {
         if (isFinished) return;
         playSound("timeout");
-        toast.error(`Time's up! ${questions[currentQuestion].explanation}`);
-        handleNextQuestion();
+        toast.error("Time's up!");
+        setShowExplanation(true);
     }
 
     const handleTip = (content: string) => {
@@ -142,6 +152,8 @@ export default function Quiz({ allQuestions, isInfinite, isRandom, take, mode }:
         setTotalDone(0);
         setCurrentQuestion(0);
         setIsFinished(false);
+        setShowExplanation(false);
+        setGaveAnswer(false);
         setPlayerStats({ totalRight: 0, performance: "0.00%" });
     }
 
@@ -151,7 +163,7 @@ export default function Quiz({ allQuestions, isInfinite, isRandom, take, mode }:
             {
                 isFinished && (
                     <div className="bg-white rounded-xl w-1/2 fixed top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 p-8 flex flex-col gap-8 items-center justify-center">
-                        <p className="text-xl text-green-800"><span className="font-bold">Congrats!</span> You've reached the end of it. Wanna try again?</p>
+                        <p className="text-xl text-green-800"><span className="font-bold">Congrats! </span>You've reached the end of it. Wanna try again?</p>
                         <ul>
                             <li className="flex items-center gap-2">
                                 <BsCheckCircle className="text-green-800" />
@@ -190,55 +202,115 @@ export default function Quiz({ allQuestions, isInfinite, isRandom, take, mode }:
                             playerStats={playerStats}
                             time={questions[currentQuestion].time}
                             handleTimeUp={handleTimeUp}
+                            showingExplanation={showExplanation}
                         />
                         <div className="flex items-center justify-center h-[90vh] p-4 lg:p-0">
                             <div className="flex flex-col justify-center items-center w-full lg:w-1/2 py-4 rounded-xl bg-white/90">
-                                <p className="text-lg font-light">{questions[currentQuestion].preStatement}</p>
-                                <h3 className="text-xl font-bold">{questions[currentQuestion].statement}</h3>
+                                {
+                                    !showExplanation && (
+                                        <>
+                                            <p className="text-lg font-light">{questions[currentQuestion].preStatement}</p>
+                                            <h3 className="text-xl font-bold">{questions[currentQuestion].statement}</h3>
+                                        </>
+                                    )
+                                }
                                 {/* statement and content */}
-                                <div className="flex items-center justify-between gap-2 my-4">
-                                    {
-                                        contents.length > 1 && (
-                                            <BsCaretLeftFill
-                                                className="text-3xl cursor-pointer hover:scale-90"
-                                                onClick={() => handlePreviousContent()}
+                                {
+                                    !showExplanation && (
+                                        <div className="flex items-center justify-between gap-2 my-4">
+                                            {
+                                                contents.length > 1 && (
+                                                    <BsCaretLeftFill
+                                                        className="text-3xl cursor-pointer hover:scale-90"
+                                                        onClick={() => handlePreviousContent()}
+                                                    />
+                                                )
+                                            }
+                                            <Content
+                                                content={questions[currentQuestion].content[currentContent]}
                                             />
-                                        )
-                                    }
-                                    <Content
-                                        content={questions[currentQuestion].content[currentContent]}
-                                    />
-                                    {
-                                        contents.length > 1 && (
-                                            <BsCaretRightFill
-                                                className="text-3xl cursor-pointer hover:scale-90"
-                                                onClick={() => handleNextContent()}
+                                            {
+                                                contents.length > 1 && (
+                                                    <BsCaretRightFill
+                                                        className="text-3xl cursor-pointer hover:scale-90"
+                                                        onClick={() => handleNextContent()}
+                                                    />
+                                                )
+                                            }
+                                        </div>
+                                    )
+                                }
+                                {/* explanation */}
+                                {
+                                    showExplanation && (
+                                        <div className="text-center w-full p-4">
+                                            <h3 className="text-xl font-bold my-3 text-neutral-800">The right answer is:</h3>
+                                            <p className="text-2xl italic mt-4 text-green-600">{questions[currentQuestion].answer}</p>
+                                            <h3 className="text-xl font-bold my-3 text-neutral-800">Explanation:</h3>
+                                            <Content
+                                                content={questions[currentQuestion].explanation}
                                             />
-                                        )
-                                    }
-                                </div>
+
+                                            {
+                                                (!gaveAnswer && questions[currentQuestion].mode.name == "explanation") && (
+                                                    <div className="w-full flex mt-4">
+                                                        <button
+                                                            onClick={() => handleAnswer("")}
+                                                            className="w-1/2 py-4 bg-red-600 text-white hover:bg-red-800 cursor-pointer flex items-center gap-2 justify-center rounded-l-xl"
+                                                        >
+                                                            <BsHandThumbsDown />
+                                                            I was wrong
+                                                        </button>
+                                                        <button
+                                                            onClick={() => handleAnswer(questions[currentQuestion].answer)}
+                                                            className="w-1/2 py-4 bg-green-600 text-white hover:bg-green-800 cursor-pointer flex items-center gap-2 justify-center rounded-r-xl"
+                                                        >
+                                                            <BsHandThumbsUp />
+                                                            I was right
+                                                        </button>
+                                                    </div>
+                                                )
+                                            }
+
+                                            {
+                                                gaveAnswer && (
+                                                    <button
+                                                        className="fixed left-0 bottom-0 w-full py-4 bg-green-600 text-white hover:bg-green-800 cursor-pointer h-[10vh]"
+                                                        onClick={() => handleNextQuestion()}
+                                                    >
+                                                        Next question
+                                                    </button>
+                                                )
+                                            }
+                                        </div>
+                                    )
+                                }
                                 {/* tips */}
-                                <div className="flex gap-2 mb-2">
-                                    {
-                                        questions[currentQuestion].tips.map((t, i) => {
-                                            return (
-                                                <div key={i}>
-                                                    {
-                                                        <BsQuestionCircle
-                                                            className="cursor-pointer hover:scale-105 hover:text-green-600"
-                                                            onClick={() => handleTip(t)}
-                                                        />
-                                                    }
-                                                </div>
-                                            )
-                                        })
-                                    }
-                                </div>
+                                {
+                                    !showExplanation && (
+                                        <div className="flex gap-2 mb-2">
+                                            {
+                                                questions[currentQuestion].tips.map((t, i) => {
+                                                    return (
+                                                        <div key={i}>
+                                                            {
+                                                                <BsQuestionCircle
+                                                                    className="cursor-pointer hover:scale-105 hover:text-green-600"
+                                                                    onClick={() => handleTip(t)}
+                                                                />
+                                                            }
+                                                        </div>
+                                                    )
+                                                })
+                                            }
+                                        </div>
+                                    )
+                                }
                             </div>
                             {/* alternatives and input */}
                             <div className="fixed bottom-0 w-full">
                                 {
-                                    mode.name == "click" && (
+                                    (questions[currentQuestion].mode.name == "click" && !showExplanation) && (
                                         <div className="flex">
                                             {
                                                 questions[currentQuestion].options.map((o, i) => {
@@ -258,7 +330,7 @@ export default function Quiz({ allQuestions, isInfinite, isRandom, take, mode }:
                                     )
                                 }
                                 {
-                                    mode.name == "type" && (
+                                    (questions[currentQuestion].mode.name == "type" && !showExplanation) && (
                                         <div className="w-full flex h-[10vh]">
                                             <input
                                                 ref={inputRef}
@@ -274,6 +346,19 @@ export default function Quiz({ allQuestions, isInfinite, isRandom, take, mode }:
                                                 className="flex justify-center items-center w-[10%] py-4 border-l bg-green-600 text-white hover:bg-green-800 cursor-pointer"
                                             >
                                                 <BsSend />
+                                            </button>
+                                        </div>
+                                    )
+                                }
+
+                                {
+                                    (questions[currentQuestion].mode.name == "explanation" && !showExplanation) && (
+                                        <div className="fixed bottom-0 w-full flex h-[10vh]">
+                                            <button
+                                                onClick={() => setShowExplanation(true)}
+                                                className="w-full py-4 border-l bg-green-600 text-white hover:bg-green-800 cursor-pointer"
+                                            >
+                                                Show explanation
                                             </button>
                                         </div>
                                     )

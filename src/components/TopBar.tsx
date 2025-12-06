@@ -7,6 +7,7 @@ type Props = {
     currentQuestion: number;
     totalDone: number;
     totalQuestions: number;
+    showingExplanation: boolean;
     playerStats: {
         totalRight: number;
         performance: string;
@@ -15,7 +16,7 @@ type Props = {
     handleTimeUp: () => void;
 }
 
-export default function TopBar({ isInfinite, isFinished, currentQuestion, totalDone, totalQuestions, playerStats, time, handleTimeUp }: Props) {
+export default function TopBar({ isInfinite, isFinished, currentQuestion, totalDone, totalQuestions, showingExplanation, playerStats, time, handleTimeUp }: Props) {
     return (
         <div className="px-4 h-12 bg-green-600 flex justify-between text-white items-center shadow-2xl">
             {
@@ -44,7 +45,7 @@ export default function TopBar({ isInfinite, isFinished, currentQuestion, totalD
                     key={currentQuestion}
                     seconds={time}
                     onFinish={handleTimeUp}
-                    running={!isFinished}
+                    running={(!isFinished && !showingExplanation)}
                 />
             </div>
         </div>

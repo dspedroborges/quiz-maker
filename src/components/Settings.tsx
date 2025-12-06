@@ -5,8 +5,6 @@ export type SettingsType = {
     isInfinite: boolean;
     isRandom: boolean;
     take: number;
-    mode: "click" | "type";
-    answersAsSuggestions: boolean;
 };
 
 export default function Settings({ onSubmit }: { onSubmit: (formState: SettingsType) => void }) {
@@ -15,8 +13,6 @@ export default function Settings({ onSubmit }: { onSubmit: (formState: SettingsT
         isInfinite: false,
         isRandom: false,
         take: 0,
-        mode: "click",
-        answersAsSuggestions: false
     });
     const [specifyTake, setSpecifyTake] = useState(false);
 
@@ -42,7 +38,7 @@ export default function Settings({ onSubmit }: { onSubmit: (formState: SettingsT
 
     return (
         <div className="w-full lg:w-1/2 p-4 mx-auto border rounded-xl border-gray-300 bg-white">
-            <h3 className="text-xl text-green-800 mb-4 border-b border-gray-300 pb-2 text-center">Configs</h3>
+            <h3 className="text-xl text-green-800 mb-4 border-b border-gray-300 pb-2 text-center">Settings</h3>
 
             <form onSubmit={handleSubmit} className="flex flex-col gap-4">
                 <div>
@@ -55,7 +51,7 @@ export default function Settings({ onSubmit }: { onSubmit: (formState: SettingsT
                     <select className="border border-gray-300 w-full p-2" name="isInfinite" id="isInfinite" onChange={handleChange} required>
                         <option value="">Select...</option>
                         <option value="true">Yes</option>
-                        <option value="false">No</option>
+                        <option value="false" selected>No</option>
                     </select>
                 </div>
 
@@ -63,7 +59,7 @@ export default function Settings({ onSubmit }: { onSubmit: (formState: SettingsT
                     <label className="font-bold block mb-2 cursor-pointer" htmlFor="isRandom">Random:</label>
                     <select className="border border-gray-300 w-full p-2" name="isRandom" id="isRandom" onChange={handleChange} required>
                         <option value="">Select...</option>
-                        <option value="true">Yes</option>
+                        <option value="true" selected>Yes</option>
                         <option value="false">No</option>
                     </select>
                 </div>
@@ -73,7 +69,7 @@ export default function Settings({ onSubmit }: { onSubmit: (formState: SettingsT
                     <select className="border border-gray-300 w-full p-2" name="specifyTake" id="specifyTake" onChange={(e) => setSpecifyTake(e.target.value == "true")} required>
                         <option value="">Select...</option>
                         <option value="true">Yes</option>
-                        <option value="false">No</option>
+                        <option value="false" selected>No</option>
                     </select>
                 </div>
 
@@ -86,29 +82,6 @@ export default function Settings({ onSubmit }: { onSubmit: (formState: SettingsT
 
                     )
                 }
-
-                <div>
-                    <label className="font-bold block mb-2 cursor-pointer" htmlFor="mode">Mode:</label>
-                    <select className="border border-gray-300 w-full p-2" name="mode" id="mode" onChange={handleChange} required>
-                        <option value="">Select...</option>
-                        <option value="type">Type the answer</option>
-                        <option value="click">Click the answer</option>
-                    </select>
-                </div>
-
-                {
-                    formState.mode == "type" && (
-                        <div>
-                            <label className="font-bold block mb-2 cursor-pointer" htmlFor="answersAsSuggestions">Answers as suggestions:</label>
-                            <select className="border border-gray-300 w-full p-2" name="answersAsSuggestions" id="answersAsSuggestions" onChange={handleChange} required>
-                                <option value="">Select...</option>
-                                <option value="true">Yes</option>
-                                <option value="false">No</option>
-                            </select>
-                        </div>
-                    )
-                }
-
                 <button className="bg-green-600 hover:bg-green-800 text-white cursor-pointer px-8 py-2 rounded-lg">
                     Start
                 </button>
