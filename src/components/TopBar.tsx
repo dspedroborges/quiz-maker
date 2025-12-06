@@ -13,7 +13,7 @@ type Props = {
         performance: string;
     };
     time: number;
-    handleTimeUp: () => void;
+    handleTimeUp?: () => void;
 }
 
 export default function TopBar({ isInfinite, isFinished, currentQuestion, totalDone, totalQuestions, showingExplanation, playerStats, time, handleTimeUp }: Props) {
@@ -38,16 +38,20 @@ export default function TopBar({ isInfinite, isFinished, currentQuestion, totalD
                 <BsGraphUp />
                 {playerStats.performance}
             </div>
+            {
+                handleTimeUp && (
+                    <div className="flex items-center gap-2">
+                        <BsClockFill />
+                        <Timer
+                            key={currentQuestion}
+                            seconds={time}
+                            onFinish={handleTimeUp}
+                            running={(!isFinished && !showingExplanation)}
+                        />
+                    </div>
+                )
+            }
 
-            <div className="flex items-center gap-2">
-                <BsClockFill />
-                <Timer
-                    key={currentQuestion}
-                    seconds={time}
-                    onFinish={handleTimeUp}
-                    running={(!isFinished && !showingExplanation)}
-                />
-            </div>
         </div>
     )
 }

@@ -74,7 +74,7 @@ export default function Quiz({ allQuestions, isInfinite, isRandom, take }: Props
 
         window.addEventListener("keydown", handler);
         return () => window.removeEventListener("keydown", handler);
-    }, [currentQuestion]);
+    }, []);
 
     const playSound = (sound: string) => {
         const audio = new Audio(`/sound_effects/${sound}.wav`);
@@ -113,21 +113,25 @@ export default function Quiz({ allQuestions, isInfinite, isRandom, take }: Props
         setGaveAnswer(false);
     }
 
+    const updatePlayerStats = () => {
+        let totalRight = playerStats.totalRight + 1;
+        let performance = (totalRight / (totalDone + 1) * 100).toFixed(2) + "%";
+        setPlayerStats({ totalRight, performance });
+    }
+
     const handleAnswer = (answer: string) => {
         if (isFinished) return;
 
         if (normalizeString(answer) == normalizeString(questions[currentQuestion].answer)) {
             toast.success("Good job!");
-            let totalRight = playerStats.totalRight + 1;
-            let performance = (totalRight / (totalDone + 1) * 100).toFixed(2) + "%";
             playSound("right");
-            setPlayerStats({ totalRight, performance })
         } else {
             playSound("wrong");
             toast.error("Wrong answer!");
         }
         setShowExplanation(true);
         setGaveAnswer(true);
+        updatePlayerStats();
     }
 
     const getTotalQuestions = () => {
@@ -138,7 +142,7 @@ export default function Quiz({ allQuestions, isInfinite, isRandom, take }: Props
         if (isFinished) return;
         playSound("timeout");
         toast.error("Time's up!");
-        setShowExplanation(true);
+        updatePlayerStats();
     }
 
     const handleTip = (content: string) => {
@@ -201,23 +205,19 @@ export default function Quiz({ allQuestions, isInfinite, isRandom, take }: Props
                             totalQuestions={getTotalQuestions()}
                             playerStats={playerStats}
                             time={questions[currentQuestion].time}
-                            handleTimeUp={handleTimeUp}
+                            handleTimeUp={questions[currentQuestion].mode.name !== "explanation" ? handleTimeUp : undefined}
                             showingExplanation={showExplanation}
                         />
                         <div className="flex items-center justify-center h-[90vh] p-4 lg:p-0">
-                            <div className="flex flex-col justify-center items-center w-full lg:w-1/2 py-4 rounded-xl bg-white/90">
-                                {
-                                    !showExplanation && (
-                                        <>
-                                            <p className="text-lg font-light">{questions[currentQuestion].preStatement}</p>
-                                            <h3 className="text-xl font-bold">{questions[currentQuestion].statement}</h3>
-                                        </>
-                                    )
-                                }
+                            <div className="flex flex-col justify-center items-center w-full lg:w-1/2 rounded-2xl bg-white/90 shadow-6xl shadow-gray-600 border-4 border-green-600">
                                 {/* statement and content */}
                                 {
                                     !showExplanation && (
-                                        <div className="flex items-center justify-between gap-2 my-4">
+                                        <div className="flex flex-col justify-center items-center p-4 gap-4">
+                                            <div>
+                                                <p className="text-lg font-light mb-3 text-center">{questions[currentQuestion].preStatement}</p>
+                                                <h3 className="text-xl font-bold text-center">{questions[currentQuestion].statement}</h3>
+                                            </div>
                                             {
                                                 contents.length > 1 && (
                                                     <BsCaretLeftFill
@@ -237,33 +237,51 @@ export default function Quiz({ allQuestions, isInfinite, isRandom, take }: Props
                                                     />
                                                 )
                                             }
+                                            {/* tips */}
+                                            <div className="flex gap-2 mb-2">
+                                                {
+                                                    questions[currentQuestion].tips.map((t, i) => {
+                                                        return (
+                                                            <div key={i}>
+                                                                {
+                                                                    <BsQuestionCircle
+                                                                        className="cursor-pointer hover:scale-105 hover:text-green-600"
+                                                                        onClick={() => handleTip(t)}
+                                                                    />
+                                                                }
+                                                            </div>
+                                                        )
+                                                    })
+                                                }
+                                            </div>
                                         </div>
                                     )
                                 }
                                 {/* explanation */}
                                 {
                                     showExplanation && (
-                                        <div className="text-center w-full p-4">
-                                            <h3 className="text-xl font-bold my-3 text-neutral-800">The right answer is:</h3>
-                                            <p className="text-2xl italic mt-4 text-green-600">{questions[currentQuestion].answer}</p>
-                                            <h3 className="text-xl font-bold my-3 text-neutral-800">Explanation:</h3>
-                                            <Content
-                                                content={questions[currentQuestion].explanation}
-                                            />
-
+                                        <div className="text-center w-full">
+                                            <div className="p-4">
+                                                <h3 className="text-xl font-bold my-3 text-neutral-800">The right answer is:</h3>
+                                                <p className="text-2xl italic mt-4 text-green-600">{questions[currentQuestion].answer}</p>
+                                                <h3 className="text-xl font-bold my-3 text-neutral-800">Explanation:</h3>
+                                                <Content
+                                                    content={questions[currentQuestion].explanation}
+                                                />
+                                            </div>
                                             {
                                                 (!gaveAnswer && questions[currentQuestion].mode.name == "explanation") && (
                                                     <div className="w-full flex mt-4">
                                                         <button
                                                             onClick={() => handleAnswer("")}
-                                                            className="w-1/2 py-4 bg-red-600 text-white hover:bg-red-800 cursor-pointer flex items-center gap-2 justify-center rounded-l-xl"
+                                                            className="w-1/2 py-4 bg-red-600 text-white hover:bg-red-800 cursor-pointer flex items-center gap-2 justify-center rounded-bl-xl"
                                                         >
                                                             <BsHandThumbsDown />
                                                             I was wrong
                                                         </button>
                                                         <button
                                                             onClick={() => handleAnswer(questions[currentQuestion].answer)}
-                                                            className="w-1/2 py-4 bg-green-600 text-white hover:bg-green-800 cursor-pointer flex items-center gap-2 justify-center rounded-r-xl"
+                                                            className="w-1/2 py-4 bg-green-600 text-white hover:bg-green-800 cursor-pointer flex items-center gap-2 justify-center rounded-br-xl"
                                                         >
                                                             <BsHandThumbsUp />
                                                             I was right
@@ -275,33 +293,12 @@ export default function Quiz({ allQuestions, isInfinite, isRandom, take }: Props
                                             {
                                                 gaveAnswer && (
                                                     <button
-                                                        className="fixed left-0 bottom-0 w-full py-4 bg-green-600 text-white hover:bg-green-800 cursor-pointer h-[10vh]"
+                                                        className="w-full py-4 bg-green-600 text-white hover:bg-green-800 cursor-pointer h-[10vh] rounded-b-xl"
                                                         onClick={() => handleNextQuestion()}
                                                     >
                                                         Next question
                                                     </button>
                                                 )
-                                            }
-                                        </div>
-                                    )
-                                }
-                                {/* tips */}
-                                {
-                                    !showExplanation && (
-                                        <div className="flex gap-2 mb-2">
-                                            {
-                                                questions[currentQuestion].tips.map((t, i) => {
-                                                    return (
-                                                        <div key={i}>
-                                                            {
-                                                                <BsQuestionCircle
-                                                                    className="cursor-pointer hover:scale-105 hover:text-green-600"
-                                                                    onClick={() => handleTip(t)}
-                                                                />
-                                                            }
-                                                        </div>
-                                                    )
-                                                })
                                             }
                                         </div>
                                     )
@@ -356,7 +353,7 @@ export default function Quiz({ allQuestions, isInfinite, isRandom, take }: Props
                                         <div className="fixed bottom-0 w-full flex h-[10vh]">
                                             <button
                                                 onClick={() => setShowExplanation(true)}
-                                                className="w-full py-4 border-l bg-green-600 text-white hover:bg-green-800 cursor-pointer"
+                                                className="w-full py-4 border-l bg-neutral-900 text-white hover:bg-neutral-800 cursor-pointer"
                                             >
                                                 Show explanation
                                             </button>
