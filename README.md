@@ -15,12 +15,13 @@
 The project is still in development and the next updates are directed to the following tasks:
 
 - [x] Quiz
+- [x] Don't allow repeated questions
 - [x] Create config form
 - [x] Show explanation
 - [x] Create a show answer option
 - [x] Allow all types of contents in the explanation
+- [ ] Infinite mode
 - [ ] Support for Latex
-- [x] Don't allow repeated questions
 - [ ] Creation form
 - [ ] Generation of quizzes with LLM
 - [ ] App available in English and Portuguese
