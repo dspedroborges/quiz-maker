@@ -14,7 +14,6 @@ export default function Settings({ onSubmit }: { onSubmit: (formState: SettingsT
         isRandom: false,
         take: 0,
     });
-    const [specifyTake, setSpecifyTake] = useState(false);
 
     const handleChange = (
         e: React.ChangeEvent<
@@ -63,25 +62,11 @@ export default function Settings({ onSubmit }: { onSubmit: (formState: SettingsT
                         <option value="false">No</option>
                     </select>
                 </div>
-
                 <div>
-                    <label className="font-bold block mb-2 cursor-pointer" htmlFor="specifyTake">Specify take:</label>
-                    <select className="border border-gray-300 w-full p-2" name="specifyTake" id="specifyTake" onChange={(e) => setSpecifyTake(e.target.value == "true")} required>
-                        <option value="">Select...</option>
-                        <option value="true">Yes</option>
-                        <option value="false" selected>No</option>
-                    </select>
+                    <label className="font-bold block cursor-pointer" htmlFor="take">Take:</label>
+                    <p className="text-xs text-gray-600 mb-2 mt-1">Leave at zero to take all</p>
+                    <input className="border border-gray-300 w-full focus:outline-0 p-2" type="number" min={0} max={200} defaultValue={0} name="take" id="take" onChange={handleChange} required />
                 </div>
-
-                {
-                    specifyTake && (
-                        <div>
-                            <label className="font-bold block mb-2 cursor-pointer" htmlFor="take">Take:</label>
-                            <input className="border border-gray-300 w-full focus:outline-0 p-2" type="number" min={0} max={200} name="take" id="take" onChange={handleChange} required />
-                        </div>
-
-                    )
-                }
                 <button className="bg-green-600 hover:bg-green-800 text-white cursor-pointer px-8 py-2 rounded-lg">
                     Start
                 </button>

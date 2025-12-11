@@ -6,7 +6,9 @@ import { DEFAULT_PALETTE } from "../utils/colors";
 import TopBar from "./TopBar";
 import Content from "./Content";
 
-export type ContentType = { type: "text" | "image" | "audio" | "video" | "youtube", value: string };
+export type FileType = "text" | "image" | "audio" | "video" | "youtube";
+
+export type ContentType = { type: FileType, value: string };
 
 export type ModeType = { name: "click" } | { name: "type", answersAsSuggestions: boolean } | { name: "explanation" };
 
@@ -209,7 +211,7 @@ export default function Quiz({ allQuestions, isInfinite, isRandom, take }: Props
                             showingExplanation={showExplanation}
                         />
                         <div className="flex items-center justify-center h-[90vh] p-4 lg:p-0">
-                            <div className="flex flex-col justify-center items-center w-full lg:w-1/2 rounded-2xl bg-white/90 shadow-6xl shadow-gray-600 border-4 border-green-600">
+                            <div className="flex flex-col justify-center items-center w-full lg:w-1/2 rounded-2xl bg-white/90 shadow-6xl shadow-gray-600 border-4 border-neutral-600">
                                 {/* statement and content */}
                                 {
                                     !showExplanation && (
@@ -293,7 +295,7 @@ export default function Quiz({ allQuestions, isInfinite, isRandom, take }: Props
                                             {
                                                 gaveAnswer && (
                                                     <button
-                                                        className="w-full py-4 bg-green-600 text-white hover:bg-green-800 cursor-pointer h-[10vh] rounded-b-xl"
+                                                        className="w-full py-4 bg-purple-950 text-white hover:bg-purple-900 cursor-pointer h-[10vh] rounded-b-xl"
                                                         onClick={() => handleNextQuestion()}
                                                     >
                                                         Next question
