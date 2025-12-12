@@ -68,25 +68,23 @@ export default function CreateUpdateForm({ savedQuiz }: { savedQuiz?: SavedQuiz 
     return (
         <div className="w-full lg:w-1/2 p-4 mx-auto rounded-xl border-gray-300 pb-16">
             <Toaster position="top-right" />
-            <div className="mb-4 border border-gray-300 border-dotted p-2 bg-purple-900/90 text-white lg:fixed left-0 top-1/2 -translate-y-1/2">
-                <p><strong>Current question:</strong> {currentIndexQuestion + 1}</p>
-                <p><strong>Total questions:</strong> {allQuestions.length}</p>
-            </div>
             <div className="bg-white rounded-b-xl rounded-x-xl rounded-t-2xl shadow-xl">
-                <h3 className="text-xl bg-green-800 text-white mb-4 border-b border-gray-300 p-2 text-center rounded-t-xl">
+                <h3 className="text-xl bg-green-800 text-white p-2 text-center rounded-t-xl">
                     {
                         savedQuiz ? "Update Quiz" : "Create Quiz"
                     }
                 </h3>
-
+                <div className="mb-4 p-2 bg-neutral-900/90 text-white text-center sticky top-0">
+                    <p>{currentIndexQuestion + 1} / {allQuestions.length}</p>
+                </div>
                 <div className="p-4">
                     <div>
-                        <label className="font-bold block mb-2">Quiz name</label>
                         <input
                             onChange={(e) => setQuizName(e.target.value)}
                             value={quizName}
-                            className="border border-gray-300 w-full p-2"
+                            className="w-full focus:outline-0 text-2xl text-center mb-4"
                             name="category"
+                            placeholder="Title of the quiz here"
                         />
                     </div>
 
@@ -371,7 +369,9 @@ export default function CreateUpdateForm({ savedQuiz }: { savedQuiz?: SavedQuiz 
                                 currentIndexQuestion <= INDEX_LAST_ELEMENT && (
                                     <div
                                         onClick={() => {
-                                            setAllQuestions([...allQuestions].filter(q => q.statement !== currentQuestion.statement))
+                                            setAllQuestions([...allQuestions].filter(q => q.statement !== currentQuestion.statement));
+                                            setCurrentIndexQuestion(allQuestions.length - 1);
+                                            resetCurrentQuestion();
                                         }}
                                         className="bg-red-600 hover:bg-red-800 text-white px-8 py-2 w-full text-center cursor-pointer text-2xl"
                                         title="Delete"
@@ -382,18 +382,53 @@ export default function CreateUpdateForm({ savedQuiz }: { savedQuiz?: SavedQuiz 
 
                             <div
                                 onClick={() => {
-                                    let allQuestionsCopy = [...allQuestions];
+                                    let allQuestionsCopy = JSON.parse(JSON.stringify(allQuestions));
                                     // this means the currentIndexQuestion is a new question
                                     if (currentIndexQuestion > INDEX_LAST_ELEMENT) {
+                                        if (allQuestionsCopy.find((q: Question) => q.statement == currentQuestion.statement)) {
+                                            toast.error("Statement has to be unique");
+                                            return;
+                                        }
+
+                                        if (currentQuestion.statement == "") {
+                                            toast.error("Statement is required");
+                                            return;
+                                        }
+
+                                        if (currentQuestion.content.length <= 0) {
+                                            toast.error("Content is required");
+                                            return;
+                                        }
+
+                                        if (currentQuestion.options.length < 2) {
+                                            toast.error("There should be at least two options");
+                                            return;
+                                        }
+
+                                        if (currentQuestion.answer == "") {
+                                            toast.error("Answer is required");
+                                            return;
+                                        }
+
+                                        if (currentQuestion.time <= 0) {
+                                            toast.error("Time has to be bigger than zero");
+                                            return;
+                                        }
+
+                                        if (!currentQuestion.options.includes(currentQuestion.answer)) {
+                                            toast.error("Answer must be included in the options");
+                                            return;
+                                        }
                                         allQuestionsCopy.push(currentQuestion);
                                         resetCurrentQuestion();
                                         setCurrentIndexQuestion(prev => prev + 1);
-                                    // this means currentIndexQuestion is a previous question
+                                        toast.success("Question created");
+                                        // this means currentIndexQuestion is a previous question
                                     } else if (currentIndexQuestion < INDEX_LAST_ELEMENT) {
                                         allQuestionsCopy[currentIndexContent] = currentQuestion;
                                         setCurrentQuestion(allQuestions[currentIndexQuestion + 1]);
                                         setCurrentIndexQuestion(prev => prev + 1);
-                                    // this means the currentIndexQuestion is the last question and the question getting displayed
+                                        // this means the currentIndexQuestion is the last question and the question getting displayed
                                     } else {
                                         allQuestionsCopy[currentIndexContent] = currentQuestion;
                                         resetCurrentQuestion();
@@ -411,17 +446,25 @@ export default function CreateUpdateForm({ savedQuiz }: { savedQuiz?: SavedQuiz 
 
                             <div
                                 onClick={() => {
-                                    if (quizName !== "" && allQuestions.length > 0) {
-                                        let allQuestionsCopy = [...allQuestions];
-                                        allQuestionsCopy[currentIndexContent] = currentQuestion;
-                                        saveQuiz(saved, { quizName, allQuestions: allQuestionsCopy });
-                                        toast.success("Your quiz has been created! You'll be redirected in 3 seconds");
-                                        setTimeout(() => {
-                                            navigate("/");
-                                        }, 3000);
-                                    } else {
-                                        toast.error("Please, complete your quiz before saving it");
+                                    if (quizName == "") {
+                                        toast.error("Title of the quiz is required");
+                                        return;
                                     }
+                                    if (!savedQuiz) {
+                                        if (saved.find(q => q.quizName.toLocaleLowerCase() == quizName.toLowerCase())) {
+                                            toast.error("There's already a quiz with that title");
+                                            return;
+                                        }
+                                    }
+                                    if (allQuestions.length == 0) {
+                                        toast.error("Your quiz should have at least one question");
+                                        return;
+                                    }
+                                    saveQuiz(saved, { quizName, allQuestions });
+                                    toast.success("Your quiz has been saved!");
+                                    setTimeout(() => {
+                                        navigate("/");
+                                    }, 1000);
                                 }}
                                 className="bg-blue-600 hover:bg-blue-800 text-white px-8 py-2 w-full text-center cursor-pointer text-2xl"
                                 title="Save"

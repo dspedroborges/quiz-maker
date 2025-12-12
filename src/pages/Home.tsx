@@ -7,11 +7,12 @@ export default function Home() {
   return (
     <div
       className="bg-cover bg-center h-screen"
-      style={{ backgroundImage: `url(https://picsum.photos/id/15/1080)` }}
+      style={{ backgroundImage: `url(https://picsum.photos/id/77/1780)` }}
     >
       <Nav />
       <div className="mt-4">
         <Settings onSubmit={(s: SettingsType) => {
+          console.log({s});
           navigate("/quiz", {
             state: s
           });

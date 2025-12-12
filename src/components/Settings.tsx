@@ -30,6 +30,8 @@ export default function Settings({ onSubmit }: { onSubmit: (formState: SettingsT
         state: false,
     });
 
+    console.log({saved});
+
     const handleChange = (
         e: React.ChangeEvent<
             HTMLInputElement | HTMLSelectElement | HTMLTextAreaElement
@@ -77,7 +79,7 @@ export default function Settings({ onSubmit }: { onSubmit: (formState: SettingsT
                                             setChosenQuiz({ quizName: "", allQuestions: [] })
                                         } else {
                                             setChosenQuiz(quiz);
-                                            setFormState({ ...formState, allQuestions: quiz.allQuestions })
+                                            setFormState({ ...formState, allQuestions: quiz.allQuestions });
                                         }
                                     }}
                                 >
