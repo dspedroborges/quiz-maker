@@ -39,14 +39,13 @@ export default function TopBar({ isInfinite, isFinished, currentQuestion, totalD
                 {playerStats.performance}
             </div>
             {
-                handleTimeUp && (
+                (handleTimeUp && !isFinished && !showingExplanation) && (
                     <div className="flex items-center gap-2">
                         <BsClockFill />
                         <Timer
                             key={currentQuestion}
                             seconds={time}
                             onFinish={handleTimeUp}
-                            running={(!isFinished && !showingExplanation)}
                         />
                     </div>
                 )
