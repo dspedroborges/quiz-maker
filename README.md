@@ -22,10 +22,13 @@ The project is still in development and the next updates are directed to the fol
 - [x] Allow all types of contents in the explanation
 - [ ] Infinite mode
 - [ ] Support for Latex
-- [ ] Creation form
+- [x] Creation form
 - [ ] Generation of quizzes with LLM
 - [ ] App available in English and Portuguese
 - [ ] Answers as suggestions according to the category
+- [ ] Backup of quizzes
+- [ ] Allow importing quizzes from backups
+- [ ] Allow selecting which category of questions will be displayed
 
 ## Prerequisites
 
