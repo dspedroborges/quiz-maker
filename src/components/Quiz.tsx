@@ -5,6 +5,7 @@ import { normalizeString, shuffleArray } from "../utils/functions";
 import { DEFAULT_PALETTE } from "../utils/colors";
 import TopBar from "./TopBar";
 import Content from "./Content";
+import { Link } from "react-router-dom";
 
 export type FileType = "text" | "image" | "audio" | "video" | "youtube";
 
@@ -145,6 +146,11 @@ export default function Quiz({ allQuestions, isInfinite, isRandom, take }: Props
         playSound("timeout");
         toast.error("Time's up!");
         updatePlayerStats();
+        setShowExplanation(true);
+
+        if (questions[currentQuestion].mode.name !== "explanation") {
+            setGaveAnswer(true);
+        }
     }
 
     const handleTip = (content: string) => {
@@ -191,7 +197,7 @@ export default function Quiz({ allQuestions, isInfinite, isRandom, take }: Props
                             >
                                 Yes
                             </button>
-                            <button className="text-neutral-600 hover:text-neutral-800 cursor-pointer underline">Go back to configs</button>
+                            <Link to={"/"} className="text-neutral-600 hover:text-neutral-800 cursor-pointer underline">Go back to settings</Link>
                         </div>
                     </div>
                 )

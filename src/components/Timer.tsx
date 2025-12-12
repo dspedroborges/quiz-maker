@@ -1,34 +1,14 @@
-import { useEffect, useState } from "react";
+import { useTimer } from "react-timer-hook";
 
-type TimerProps = {
-  seconds: number;
-  running: boolean;
-  onFinish: () => void;
-};
+export function Timer({ seconds, onFinish }: { seconds: number; onFinish: () => void }) {
+  const expiry = new Date();
+  expiry.setSeconds(expiry.getSeconds() + seconds);
 
-export function Timer({ seconds, running, onFinish }: TimerProps) {
-  const [time, setTime] = useState(seconds);
+  const { seconds: s } = useTimer({
+    expiryTimestamp: expiry,
+    autoStart: true,
+    onExpire: onFinish
+  });
 
-  useEffect(() => {
-    setTime(seconds);
-  }, [seconds]);
-
-  useEffect(() => {
-    if (!running) return;
-
-    const id = setInterval(() => {
-      setTime(v => {
-        if (v <= 1) {
-          clearInterval(id);
-          onFinish();
-          return 0;
-        }
-        return v - 1;
-      });
-    }, 1000);
-
-    return () => clearInterval(id);
-  }, [running, seconds, onFinish]);
-
-  return <span>{time}s</span>;
+  return <span>{s}s</span>;
 }

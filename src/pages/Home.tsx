@@ -1,36 +1,22 @@
-import { useState } from "react";
-import Quiz from "../components/Quiz"
 import Settings, { type SettingsType } from "../components/Settings";
+import Nav from "../components/Nav";
+import { useNavigate } from "react-router-dom";
 
 export default function Home() {
-  const [started, setStarted] = useState(false);
-  const [settingsState, setSettingsState] = useState<SettingsType>({
-    allQuestions: "",
-    isInfinite: false,
-    isRandom: false,
-    take: 0,
-  });
-
+  const navigate = useNavigate();
   return (
     <div
       className="bg-cover bg-center h-screen"
       style={{ backgroundImage: `url(https://picsum.photos/id/15/1080)` }}
     >
-      {
-        started ? (
-          <Quiz
-            allQuestions={JSON.parse(settingsState?.allQuestions)}
-            isInfinite={settingsState.isInfinite}
-            isRandom={settingsState.isRandom}
-            take={settingsState.take}
-          />
-        ) : (
-          <Settings onSubmit={(s: SettingsType) => {
-            setSettingsState(s);
-            setStarted(true);
-          }} />
-        )
-      }
+      <Nav />
+      <div className="mt-4">
+        <Settings onSubmit={(s: SettingsType) => {
+          navigate("/quiz", {
+            state: s
+          });
+        }} />
+      </div>
     </div>
   )
 }
