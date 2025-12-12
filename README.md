@@ -26,8 +26,8 @@ The project is still in development and the next updates are directed to the fol
 - [ ] Generation of quizzes with LLM
 - [ ] App available in English and Portuguese
 - [ ] Answers as suggestions according to the category
-- [ ] Backup of quizzes
-- [ ] Allow importing quizzes from backups
+- [ ] Export quizzes
+- [ ] Import quizzes
 - [ ] Allow selecting which category of questions will be displayed
 
 ## Prerequisites
