@@ -6,7 +6,7 @@ export default function Home() {
   const navigate = useNavigate();
   return (
     <div
-      className="bg-cover bg-center h-screen"
+      className="bg-cover bg-center min-h-screen"
       style={{ backgroundImage: `url(https://picsum.photos/id/77/1780)` }}
     >
       <Nav />

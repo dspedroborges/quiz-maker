@@ -16,7 +16,10 @@ export default function QuizPage() {
     if (!state || !state.allQuestions) return null;
 
     return (
-        <div className="bg-neutral-600">
+        <div
+            className="bg-cover bg-center min-h-screen"
+            style={{ backgroundImage: `url(https://picsum.photos/id/77/1780)` }}
+        >
             <Nav />
             <Quiz
                 allQuestions={state.allQuestions}
