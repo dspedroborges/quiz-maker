@@ -39,7 +39,7 @@ export default function Create() {
                 mode: ModeType;
             };
 
-            In content of type text, you may use $ to Latex. For example: $latex here$
+            In content of type text, you may use $ to Latex. For example: $latex here$. But use latex only for subjects that actually involves Math.
 
             Make preference to the click mode.
             
