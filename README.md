@@ -31,6 +31,29 @@ The project is still in development and the next updates are directed to the fol
 - [ ] Allow selecting which category of questions will be displayed
 - [ ] Preview of question when creating it manually
 
+## Tech Stack
+
+### Core
+- React
+- React DOM
+- TypeScript
+- Vite
+
+### Styling
+- Tailwind CSS
+
+### Routing
+- React Router DOM
+
+### Math / LaTeX
+- KaTeX
+- react-katex
+
+### UI / UX
+- React Icons
+- Sonner (toast notifications)
+- react-timer-hook
+
 ## Prerequisites
 
 Before getting started, make sure you meet the following requirements for a Node.js project:
