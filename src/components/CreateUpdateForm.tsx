@@ -6,6 +6,7 @@ import { toast, Toaster } from "sonner";
 import { useNavigate } from "react-router-dom";
 import type { SavedQuiz } from "../hooks/useQuiz";
 import useQuiz from "../hooks/useQuiz";
+import { MdClear } from "react-icons/md";
 
 const INITIAL_QUESTION: Question = {
     category: "",
@@ -93,7 +94,7 @@ export default function CreateUpdateForm({ savedQuiz }: { savedQuiz?: SavedQuiz 
                     </h4>
                     <form className="flex flex-col gap-4">
                         <div>
-                            <label className="font-bold block mb-2">Category</label>
+                            <label className="font-bold block mb-2">Category<sup className="text-xs text-gray-300">(optional)</sup></label>
                             <input
                                 onChange={(e) => setCurrentQuestion({ ...currentQuestion, category: e.target.value })}
                                 value={currentQuestion.category}
@@ -103,7 +104,7 @@ export default function CreateUpdateForm({ savedQuiz }: { savedQuiz?: SavedQuiz 
                         </div>
 
                         <div>
-                            <label className="font-bold block mb-2">Pre-statement</label>
+                            <label className="font-bold block mb-2">Pre-statement<sup className="text-xs text-gray-300">(optional)</sup></label>
                             <input
                                 onChange={(e) => setCurrentQuestion({ ...currentQuestion, preStatement: e.target.value })}
                                 value={currentQuestion.preStatement}
@@ -113,17 +114,17 @@ export default function CreateUpdateForm({ savedQuiz }: { savedQuiz?: SavedQuiz 
                         </div>
 
                         <div>
-                            <label className="font-bold block mb-2">Statement</label>
+                            <label className="font-bold block mb-2">Statement<sup className="text-xs text-red-600">*</sup></label>
                             <input
                                 onChange={(e) => setCurrentQuestion({ ...currentQuestion, statement: e.target.value })}
                                 value={currentQuestion.statement}
-                                className="border border-gray-300 w-full p-2"
+                                className="border border-gray-300 w-full p-2 bg-red-50"
                                 name="statement"
                             />
                         </div>
 
                         <div>
-                            <label className="font-bold block mb-2">Content</label>
+                            <label className="font-bold block mb-2">Content<sup className="text-xs text-red-600">*</sup></label>
                             <div className="flex justify-between">
                                 {
                                     currentQuestion.content.length > 1 && (
@@ -150,9 +151,10 @@ export default function CreateUpdateForm({ savedQuiz }: { savedQuiz?: SavedQuiz 
                                 }
                             </div>
 
-                            <div className="mt-2 border border-gray-300 border-dashed p-4 rounded">
+                            <div className="mt-2 border border-gray-300 border-dashed p-4 rounded bg-red-50">
                                 <select
                                     onChange={(e) => setCurrentContent({ ...currentContent, type: e.target.value as FileType })}
+                                    value={currentContent.type}
                                     className="border border-gray-300 w-full p-1 mb-1"
                                 >
                                     <option value="text">text</option>
@@ -198,7 +200,7 @@ export default function CreateUpdateForm({ savedQuiz }: { savedQuiz?: SavedQuiz 
                                         type="button"
                                         className="bg-neutral-700 hover:bg-neutral-800 cursor-pointer w-full text-white py-2 mt-2 text-2xl"
                                     >
-                                        <BsArrow90DegLeft className="mx-auto" />
+                                        <MdClear className="mx-auto" />
                                     </button>
                                     <button
                                         onClick={() => {
@@ -217,31 +219,31 @@ export default function CreateUpdateForm({ savedQuiz }: { savedQuiz?: SavedQuiz 
                         </div>
 
                         <div>
-                            <label className="font-bold block mb-2">Options</label>
+                            <label className="font-bold block mb-2">Options<sup className="text-xs text-red-600">*</sup></label>
                             <textarea
                                 onChange={(e) => setCurrentQuestion({ ...currentQuestion, options: e.target.value.split("\n") })}
                                 value={currentQuestion.options.join("\n")}
-                                className="border border-gray-300 w-full p-2"
+                                className="border border-gray-300 w-full p-2 bg-red-50"
                                 placeholder="One option per line"
                             ></textarea>
                         </div>
 
                         <div>
-                            <label className="font-bold block mb-2">Answer</label>
+                            <label className="font-bold block mb-2">Answer<sup className="text-xs text-red-600">*</sup></label>
                             <input
                                 onChange={(e) => setCurrentQuestion({ ...currentQuestion, answer: e.target.value })}
                                 value={currentQuestion.answer}
-                                className="border border-gray-300 w-full p-2"
+                                className="border border-gray-300 w-full p-2 bg-red-50"
                                 name="answer"
                             />
                         </div>
 
                         <div>
-                            <label className="font-bold block mb-2">Time</label>
+                            <label className="font-bold block mb-2">Time<sup className="text-xs text-red-600">*</sup></label>
                             <input
                                 onChange={(e) => setCurrentQuestion({ ...currentQuestion, time: Number(e.target.value) })}
                                 value={currentQuestion.time}
-                                className="border border-gray-300 w-full p-2"
+                                className="border border-gray-300 w-full p-2 bg-red-50"
                                 type="number"
                                 min="0"
                                 name="time"
@@ -249,7 +251,7 @@ export default function CreateUpdateForm({ savedQuiz }: { savedQuiz?: SavedQuiz 
                         </div>
 
                         <div>
-                            <label className="font-bold block mb-2">Explanation</label>
+                            <label className="font-bold block mb-2">Explanation<sup className="text-xs text-gray-300">(optional)</sup></label>
 
                             <select
                                 onChange={(e) => setCurrentQuestion({
@@ -290,7 +292,7 @@ export default function CreateUpdateForm({ savedQuiz }: { savedQuiz?: SavedQuiz 
                         </div>
 
                         <div>
-                            <label className="font-bold block mb-2">Tips</label>
+                            <label className="font-bold block mb-2">Tips<sup className="text-xs text-gray-300">(optional)</sup></label>
                             <textarea
                                 onChange={(e) => setCurrentQuestion({ ...currentQuestion, tips: e.target.value.split("\n") })}
                                 value={currentQuestion.tips.join("\n")}
@@ -300,7 +302,7 @@ export default function CreateUpdateForm({ savedQuiz }: { savedQuiz?: SavedQuiz 
                         </div>
 
                         <div>
-                            <label className="font-bold block mb-2">Mode</label>
+                            <label className="font-bold block mb-2">Mode<sup className="text-xs text-red-600">*</sup></label>
                             <select
                                 onChange={(e) => {
                                     const name = e.target.value as "click" | "type" | "explanation";
@@ -322,7 +324,7 @@ export default function CreateUpdateForm({ savedQuiz }: { savedQuiz?: SavedQuiz 
                                     }
                                 }}
                                 value={currentQuestion.mode.name}
-                                className="border border-gray-300 w-full p-2"
+                                className="border border-gray-300 w-full p-2 bg-red-50"
                             >
                                 <option value="">Select...</option>
                                 <option value="click">Click on the alternative</option>
