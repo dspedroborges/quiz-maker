@@ -16,7 +16,7 @@ export default function Settings({ onSubmit }: { onSubmit: (formState: SettingsT
     const [formState, setFormState] = useState<SettingsType>({
         allQuestions: [],
         isInfinite: false,
-        isRandom: false,
+        isRandom: true,
         take: 0,
     });
     const { saved, deleteQuiz } = useQuiz();

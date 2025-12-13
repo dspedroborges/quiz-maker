@@ -20,7 +20,7 @@ The project is still in development and the next updates are directed to the fol
 - [x] Show explanation
 - [x] Create a show answer option
 - [x] Allow all types of contents in the explanation
-- [ ] Infinite mode
+- [x] Infinite mode
 - [ ] Support for Latex
 - [x] Creation form
 - [ ] Generation of quizzes with LLM

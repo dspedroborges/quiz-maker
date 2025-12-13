@@ -51,8 +51,8 @@ export default function Quiz({ allQuestions, isInfinite, isRandom, take }: Props
     // this state is to check if the user clicked on "I was right" or "I was wrong" before showing the button "Next question"
     const [gaveAnswer, setGaveAnswer] = useState(false);
 
-    useEffect(() => {
-        let pool = [...questions];
+    const setShuffled = () => {
+        let pool = JSON.parse(JSON.stringify(questions));
         if (isRandom) {
             pool = shuffleArray(pool);
         }
@@ -61,7 +61,13 @@ export default function Quiz({ allQuestions, isInfinite, isRandom, take }: Props
             pool = pool.slice(0, take);
         }
 
+        console.log(pool[0].statement);
+
         setQuestions(pool);
+    }
+
+    useEffect(() => {
+        setShuffled();
     }, [isFinished]);
 
     useEffect(() => {
@@ -104,9 +110,14 @@ export default function Quiz({ allQuestions, isInfinite, isRandom, take }: Props
         if (currentQuestion + 1 < questions.length) {
             setCurrentQuestion(currentQuestion + 1);
         } else {
-            toast.success("You've finished it!");
-            playSound("finish");
-            setIsFinished(true);
+            if (isInfinite) {
+                setShuffled();
+                setCurrentQuestion(0);
+            } else {
+                toast.success("You've finished it!");
+                playSound("finish");
+                setIsFinished(true);
+            }
         }
 
         setCurrentContent(0);
@@ -116,8 +127,8 @@ export default function Quiz({ allQuestions, isInfinite, isRandom, take }: Props
         setGaveAnswer(false);
     }
 
-    const updatePlayerStats = () => {
-        let totalRight = playerStats.totalRight + 1;
+    const updatePlayerStats = (right: boolean) => {
+        let totalRight = right ? playerStats.totalRight + 1 : playerStats.totalRight;
         let performance = (totalRight / (totalDone + 1) * 100).toFixed(2) + "%";
         setPlayerStats({ totalRight, performance });
     }
@@ -125,16 +136,18 @@ export default function Quiz({ allQuestions, isInfinite, isRandom, take }: Props
     const handleAnswer = (answer: string) => {
         if (isFinished) return;
 
+        let right = false;
         if (normalizeString(answer) == normalizeString(questions[currentQuestion].answer)) {
             toast.success("Good job!");
             playSound("right");
+            right = true;
         } else {
             playSound("wrong");
             toast.error("Wrong answer!");
         }
         setShowExplanation(true);
         setGaveAnswer(true);
-        updatePlayerStats();
+        updatePlayerStats(right);
     }
 
     const getTotalQuestions = () => {
@@ -145,7 +158,7 @@ export default function Quiz({ allQuestions, isInfinite, isRandom, take }: Props
         if (isFinished) return;
         playSound("timeout");
         toast.error("Time's up!");
-        updatePlayerStats();
+        updatePlayerStats(false);
         setShowExplanation(true);
 
         if (questions[currentQuestion].mode.name !== "explanation") {
