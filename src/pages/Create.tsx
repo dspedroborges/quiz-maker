@@ -19,7 +19,7 @@ export default function Create() {
             <div className="bg-white w-full lg:w-1/2 p-4 rounded-xl mx-auto mt-4">
                 <h3 className="text-xl text-green-800 mb-4 border-b border-gray-300 pb-2 text-center">Create</h3>
 
-                <div className="flex gap-1 border-b pb-8 mb-4 border-gray-300 border-dashed">
+                <div className="flex gap-1">
                     <button
                         className="w-full bg-neutral-900 text-white hover:bg-neutral-800 cursor-pointer p-2"
                         onClick={() => setConfig({ show: true, useLLM: true })}
