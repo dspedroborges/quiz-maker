@@ -94,7 +94,8 @@ export default function CreateUpdateForm({ savedQuiz }: { savedQuiz?: SavedQuiz 
                     </h4>
                     <form className="flex flex-col gap-4">
                         <div>
-                            <label className="font-bold block mb-2">Category<sup className="text-xs text-gray-300">(optional)</sup></label>
+                            <label className="font-bold block">Category<sup className="text-xs text-gray-300">(optional)</sup></label>
+                            <span className="text-xs text-gray-600 mb-2 block">Category can later be used to filter questions</span>
                             <input
                                 onChange={(e) => setCurrentQuestion({ ...currentQuestion, category: e.target.value })}
                                 value={currentQuestion.category}
@@ -104,7 +105,8 @@ export default function CreateUpdateForm({ savedQuiz }: { savedQuiz?: SavedQuiz 
                         </div>
 
                         <div>
-                            <label className="font-bold block mb-2">Pre-statement<sup className="text-xs text-gray-300">(optional)</sup></label>
+                            <label className="font-bold block">Pre-statement<sup className="text-xs text-gray-300">(optional)</sup></label>
+                            <span className="text-xs text-gray-600 mb-2 block">The pre-statement will be displayed right above the statement</span>
                             <input
                                 onChange={(e) => setCurrentQuestion({ ...currentQuestion, preStatement: e.target.value })}
                                 value={currentQuestion.preStatement}
@@ -139,6 +141,11 @@ export default function CreateUpdateForm({ savedQuiz }: { savedQuiz?: SavedQuiz 
                                         </div>
                                     )
                                 }
+                                {
+                                    currentQuestion.content.length == 0 && (
+                                        <p>No content has been created to this question</p>
+                                    )
+                                }
                                 <BsCaretRightFill
                                     className="text-3xl cursor-pointer hover:scale-90"
                                     onClick={() => handleNextContent()}
@@ -166,7 +173,7 @@ export default function CreateUpdateForm({ savedQuiz }: { savedQuiz?: SavedQuiz 
                                                 onChange={(e) => setCurrentContent({ ...currentContent, value: e.target.value })}
                                                 value={currentContent.value}
                                                 className="border border-gray-300 w-full p-2 my-1 min-h-[100px]"
-                                                placeholder="Use * for bold, __ for italic and $ for Latex"
+                                                placeholder="Use * for bold, __ for italic and $ for Latex. For example: *Hello*, __this__ is Latex: $\frac{1}{2}$"
                                             ></textarea>
                                         </div>
                                     ) : (
@@ -251,8 +258,8 @@ export default function CreateUpdateForm({ savedQuiz }: { savedQuiz?: SavedQuiz 
                         </div>
 
                         <div>
-                            <label className="font-bold block mb-2">Explanation<sup className="text-xs text-gray-300">(optional)</sup></label>
-
+                            <label className="font-bold block">Explanation<sup className="text-xs text-gray-300">(optional)</sup></label>
+                            <span className="text-xs text-gray-600 mb-2 block">The explanation will be displayed right after the user answers a question</span>
                             <select
                                 onChange={(e) => setCurrentQuestion({
                                     ...currentQuestion,
@@ -279,7 +286,7 @@ export default function CreateUpdateForm({ savedQuiz }: { savedQuiz?: SavedQuiz 
                                             })}
                                             value={currentQuestion.explanation.value}
                                             className="border border-gray-300 w-full p-2 my-1 min-h-[100px]"
-                                            placeholder="Use * for bold, __ for italic and $ for Latex"
+                                            placeholder="Use * for bold, __ for italic and $ for Latex. For example: *Hello*, __this__ is Latex: $\frac{1}{2}$"
                                         ></textarea>
                                     </div>
                                 ) : (
@@ -442,11 +449,13 @@ export default function CreateUpdateForm({ savedQuiz }: { savedQuiz?: SavedQuiz 
                                     }
                                     setAllQuestions(allQuestionsCopy);
                                 }}
-                                className="bg-green-600 hover:bg-green-800 text-white px-8 py-2 w-full text-center cursor-pointer text-2xl"
+                                className="bg-green-800 hover:bg-green-900 text-white px-8 py-2 w-full text-center cursor-pointer text-2xl"
                                 title="Add or go forward"
                             >
                                 {
-                                    currentIndexQuestion > INDEX_LAST_QUESTION ? <BsPlusCircle className="mx-auto" /> : <BsArrowRight className="mx-auto" />
+                                    currentIndexQuestion > INDEX_LAST_QUESTION ?
+                                        <span>Add question</span>
+                                        : <BsArrowRight className="mx-auto" />
                                 }
                             </div>
 
@@ -472,10 +481,10 @@ export default function CreateUpdateForm({ savedQuiz }: { savedQuiz?: SavedQuiz 
                                         navigate("/");
                                     }, 1000);
                                 }}
-                                className="bg-blue-600 hover:bg-blue-800 text-white px-8 py-2 w-full text-center cursor-pointer text-2xl"
+                                className="bg-blue-800 hover:bg-blue-900 text-white px-8 py-2 w-full text-center cursor-pointer text-2xl"
                                 title="Save"
                             >
-                                <BsDisc className="mx-auto" />
+                                <span>Save Quiz</span>
                             </div>
                         </div>
                     </form>

@@ -23,12 +23,13 @@ The project is still in development and the next updates are directed to the fol
 - [x] Infinite mode
 - [x] Support for Latex
 - [x] Creation form
-- [ ] Generation of quizzes with LLM
-- [ ] App available in English and Portuguese
-- [ ] Suggestions
 - [x] Export quizzes
 - [x] Import quizzes
+- [ ] Generation of quizzes with LLM
+- [ ] App available in English and Portuguese
+- [ ] Suggestions when question mode is "type"
 - [ ] Allow selecting which category of questions will be displayed
+- [ ] Preview of question when creating it manually
 
 ## Prerequisites
 

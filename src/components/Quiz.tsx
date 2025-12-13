@@ -285,10 +285,15 @@ export default function Quiz({ allQuestions, isInfinite, isRandom, take }: Props
                                             <div className="p-4">
                                                 <h3 className="text-xl font-bold my-3 text-neutral-800">The right answer is:</h3>
                                                 <p className="text-2xl italic mt-4 text-green-600">{questions[currentQuestion].answer}</p>
-                                                <h3 className="text-xl font-bold my-3 text-neutral-800">Explanation:</h3>
-                                                <Content
-                                                    content={questions[currentQuestion].explanation}
-                                                />
+                                                {
+                                                    questions[currentQuestion].explanation.value !== "" &&
+                                                        <>
+                                                            <h3 className="text-xl font-bold my-3 text-neutral-800">Explanation:</h3>
+                                                            <Content
+                                                                content={questions[currentQuestion].explanation}
+                                                            />
+                                                        </>
+                                                }
                                             </div>
                                             {
                                                 (!gaveAnswer && questions[currentQuestion].mode.name == "explanation") && (
