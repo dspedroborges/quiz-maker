@@ -45,6 +45,10 @@ export default function Create() {
 
             You must not show the answer in the content! You must not show the answer in the tips!
 
+            You must not use the contets as alternatives. That's why we have the options.
+
+            One of the options must be the answer and it has to be exactly like it's written in the options!
+
             Make preference to the click mode.
             
             You must give your answer as a JSON. Do not say anything else.
