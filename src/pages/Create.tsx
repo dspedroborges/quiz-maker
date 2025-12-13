@@ -87,7 +87,7 @@ export default function Create() {
                                 config.useLLM ? (
                                     <>
                                         <label htmlFor="import" className="block font-bold mt-4 mb-2 cursor-pointer">What is the quiz about?</label>
-                                        <p className="bg-red-50 p-2 rounded-xl"><strong>Disclaimer: </strong>Be aware that not always the LLM produces trustworthy content and sometimes the quizzes might appear a little broken, but you can update them.</p>
+                                        <p className="bg-red-50 p-2 rounded-xl mb-2"><strong>Disclaimer: </strong>Be aware that not always the LLM produces trustworthy content and sometimes the quizzes might appear a little broken, but you can update them.</p>
                                         <input
                                             id="import"
                                             className="border border-gray-300 p-2 rounded-xl hover:bg-gray-100 w-full mb-2"
