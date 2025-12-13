@@ -7,6 +7,8 @@ export default function Create() {
     const [config, setConfig] = useState({ show: false, useLLM: false });
     const [prompt, setPrompt] = useState("");
 
+    console.log(prompt);
+
     return (
         <div
             className="min-h-screen bg-neutral-500"
