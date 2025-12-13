@@ -27,7 +27,7 @@ The project is still in development and the next updates are directed to the fol
 - [ ] App available in English and Portuguese
 - [ ] Suggestions
 - [x] Export quizzes
-- [ ] Import quizzes
+- [x] Import quizzes
 - [ ] Allow selecting which category of questions will be displayed
 
 ## Prerequisites

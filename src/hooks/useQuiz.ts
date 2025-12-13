@@ -4,13 +4,13 @@ export type SavedQuiz = { quizName: string, allQuestions: Question[] };
 
 const saveQuiz = (savedLs: SavedQuiz[], newData: { quizName: string, allQuestions: Question[] }) => {
     const { quizName, allQuestions } = newData;
-    console.log({newData});
-    console.log({savedLs});
+    if (!quizName || !allQuestions) console.log({quizName, allQuestions});
+
+    console.log("ok: ", {quizName, allQuestions});
+
     if (savedLs.length === 0) {
-        console.log("not saved before");
         localStorage.setItem("quizzes", JSON.stringify([{ quizName, allQuestions }]))
     } else {
-        console.log("saved before");
         savedLs = savedLs.filter(quiz => quiz.quizName !== newData.quizName);
         localStorage.setItem("quizzes", JSON.stringify(
             [

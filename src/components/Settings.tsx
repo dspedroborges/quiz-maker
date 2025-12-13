@@ -74,11 +74,6 @@ export default function Settings({ onSubmit }: { onSubmit: (formState: SettingsT
             <h3 className="text-xl text-green-800 mb-4 border-b border-gray-300 pb-2 text-center">Settings</h3>
 
             <form onSubmit={handleSubmit} className="flex flex-col gap-4">
-                {/* <div>
-                    <label className="font-bold block mb-2 cursor-pointer" htmlFor="allQuestions">Questions:</label>
-                    <textarea className="border border-gray-300 w-full focus:outline-0 p-2 min-h-[50px]" name="allQuestions" id="allQuestions" onChange={handleChange} required />
-                </div> */}
-
                 <div>
                     {
                         saved.map((quiz, i) => {

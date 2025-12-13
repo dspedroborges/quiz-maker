@@ -15,6 +15,11 @@ export default function Nav() {
                         Create
                     </Link>
                 </li>
+                <li className="hover:underline">
+                    <Link to="/import">
+                        Import
+                    </Link>
+                </li>
             </ul>
         </nav>
     )
