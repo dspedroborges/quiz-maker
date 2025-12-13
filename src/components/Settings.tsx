@@ -4,6 +4,7 @@ import { BsCheck2Circle, BsCircle, BsPencilSquare, BsTrash } from "react-icons/b
 import type { Question } from "./Quiz";
 import { toast, Toaster } from "sonner";
 import { useNavigate } from "react-router-dom";
+import { FiDownload } from "react-icons/fi";
 
 export type SettingsType = {
     allQuestions: Question[];
@@ -11,6 +12,19 @@ export type SettingsType = {
     isRandom: boolean;
     take: number;
 };
+
+function downloadJson(data: unknown, filename: string) {
+    const json = JSON.stringify(data, null, 2);
+    const blob = new Blob([json], { type: "application/json" });
+    const url = URL.createObjectURL(blob);
+
+    const a = document.createElement("a");
+    a.href = url;
+    a.download = filename;
+    a.click();
+
+    URL.revokeObjectURL(url);
+}
 
 export default function Settings({ onSubmit }: { onSubmit: (formState: SettingsType) => void }) {
     const [formState, setFormState] = useState<SettingsType>({
@@ -29,8 +43,6 @@ export default function Settings({ onSubmit }: { onSubmit: (formState: SettingsT
         id: 0,
         state: false,
     });
-
-    console.log({saved});
 
     const handleChange = (
         e: React.ChangeEvent<
@@ -113,6 +125,12 @@ export default function Settings({ onSubmit }: { onSubmit: (formState: SettingsT
                                                 />
                                             )
                                         }
+                                        <FiDownload
+                                            className="hover:scale-105 cursor-pointer"
+                                            onClick={() => {
+                                                downloadJson(quiz, `${quiz.quizName.toLowerCase().replaceAll(" ", "_")}_quiz.json`);
+                                            }}
+                                        />
                                     </div>
                                 </div>
                             )
