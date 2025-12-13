@@ -1,7 +1,7 @@
 import { useEffect, useState } from "react";
 import type { ContentType, FileType, Question } from "./Quiz";
 import Content from "./Content";
-import { BsArrow90DegLeft, BsArrowRight, BsCaretLeftFill, BsCaretRightFill, BsDisc, BsPlusCircle, BsTrash } from "react-icons/bs";
+import { BsArrow90DegLeft, BsArrowRight, BsCaretLeftFill, BsCaretRightFill, BsPlusCircle, BsTrash } from "react-icons/bs";
 import { toast, Toaster } from "sonner";
 import { useNavigate } from "react-router-dom";
 import type { SavedQuiz } from "../hooks/useQuiz";
