@@ -71,7 +71,7 @@ export default function Settings({ onSubmit }: { onSubmit: (formState: SettingsT
     return (
         <div className="w-full lg:w-1/2 p-4 mx-auto border rounded-xl border-gray-300 bg-white">
             <Toaster position="top-right" />
-            <h3 className="text-xl text-green-800 mb-4 border-b border-gray-300 pb-2 text-center">Settings</h3>
+            <h3 className="text-xl text-green-800 mb-4 border-b border-gray-300 pb-2 text-center">Choose your quiz</h3>
 
             <form onSubmit={handleSubmit} className="flex flex-col gap-4">
                 <div>
@@ -80,7 +80,7 @@ export default function Settings({ onSubmit }: { onSubmit: (formState: SettingsT
                             return (
                                 <div
                                     key={i}
-                                    className={`p-2 cursor-pointer hover:bg-gray-100 flex items-center justify-between w-full ${chosenQuiz.quizName == quiz.quizName && "bg-purple-100"}`}
+                                    className={`p-2 cursor-pointer hover:bg-green-100 flex items-center justify-between w-full ${chosenQuiz.quizName == quiz.quizName && "bg-green-200"} select-none`}
                                     onClick={() => {
                                         if (chosenQuiz.quizName == quiz.quizName) {
                                             setChosenQuiz({ quizName: "", allQuestions: [] })
@@ -92,12 +92,12 @@ export default function Settings({ onSubmit }: { onSubmit: (formState: SettingsT
                                 >
                                     {
                                         chosenQuiz.quizName == quiz.quizName ? (
-                                            <BsCheck2Circle />
+                                            <BsCheck2Circle className="text-xl" />
                                         ) : (
-                                            <BsCircle className="text-xs" />
+                                            <BsCircle className="text-md" />
                                         )
                                     }
-                                    <span>{quiz.quizName}</span>
+                                    <span>{quiz.quizName} ({quiz.allQuestions.length})</span>
                                     <div className="flex items-center gap-2">
                                         <BsPencilSquare
                                             className="hover:scale-105 cursor-pointer"
@@ -140,7 +140,7 @@ export default function Settings({ onSubmit }: { onSubmit: (formState: SettingsT
                 </div>
 
                 {
-                    saved.length > 0 && (
+                    (saved.length > 0 && chosenQuiz.allQuestions.length > 0) && (
                         <>
                             <div>
                                 <label className="font-bold block mb-2 cursor-pointer" htmlFor="isInfinite">Infinite:</label>
@@ -161,8 +161,7 @@ export default function Settings({ onSubmit }: { onSubmit: (formState: SettingsT
                             </div>
                             <div>
                                 <label className="font-bold block cursor-pointer" htmlFor="take">Take:</label>
-                                <p className="text-xs text-gray-600 mb-2 mt-1">Leave at zero to take all</p>
-                                <input className="border border-gray-300 w-full focus:outline-0 p-2" type="number" min={0} max={200} defaultValue={0} name="take" id="take" onChange={handleChange} required />
+                                <input className="border border-gray-300 w-full focus:outline-0 p-2" type="number" min={0} defaultValue={chosenQuiz.allQuestions.length} name="take" id="take" onChange={handleChange} required />
                             </div>
                             <button className="bg-green-600 hover:bg-green-800 text-white cursor-pointer px-8 py-2 rounded-lg">
                                 Start

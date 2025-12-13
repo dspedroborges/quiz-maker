@@ -66,7 +66,7 @@ export default function CreateUpdateForm({ savedQuiz }: { savedQuiz?: SavedQuiz 
     }
 
     return (
-        <div className="w-full lg:w-1/2 p-4 mx-auto rounded-xl border-gray-300 pb-16">
+        <div className="p-4 mx-auto rounded-xl border-gray-300 pb-16">
             <Toaster position="top-right" />
             <div className="bg-white rounded-b-xl rounded-x-xl rounded-t-2xl shadow-xl">
                 <h3 className="text-xl bg-green-800 text-white p-2 text-center rounded-t-xl">
@@ -89,7 +89,7 @@ export default function CreateUpdateForm({ savedQuiz }: { savedQuiz?: SavedQuiz 
                     </div>
 
                     <h4 className="text-lg text-green-800 my-4 border-b border-gray-300 pb-2 text-center">
-                        Questions
+                        #{currentIndexQuestion + 1} Question
                     </h4>
                     <form className="flex flex-col gap-4">
                         <div>
