@@ -124,16 +124,12 @@ export default function CreateUpdateForm({ savedQuiz }: { savedQuiz?: SavedQuiz 
                         </div>
 
                         <div>
-                            <label className="font-bold block mb-2">Content<sup className="text-xs text-red-600">*</sup></label>
+                            <label className="font-bold block mb-4">Contents<sup className="text-xs text-red-600">*</sup></label>
                             <div className="flex justify-between">
-                                {
-                                    currentQuestion.content.length > 1 && (
-                                        <BsCaretLeftFill
-                                            className="text-3xl cursor-pointer hover:scale-90"
-                                            onClick={() => handlePreviousContent()}
-                                        />
-                                    )
-                                }
+                                <BsCaretLeftFill
+                                    className="text-3xl cursor-pointer hover:scale-90"
+                                    onClick={() => handlePreviousContent()}
+                                />
                                 {
                                     currentQuestion.content.length > 0 && (
                                         <div onClick={() => setCurrentContent(currentQuestion.content[currentIndexContent])}>
@@ -143,14 +139,10 @@ export default function CreateUpdateForm({ savedQuiz }: { savedQuiz?: SavedQuiz 
                                         </div>
                                     )
                                 }
-                                {
-                                    currentQuestion.content.length > 1 && (
-                                        <BsCaretRightFill
-                                            className="text-3xl cursor-pointer hover:scale-90"
-                                            onClick={() => handleNextContent()}
-                                        />
-                                    )
-                                }
+                                <BsCaretRightFill
+                                    className="text-3xl cursor-pointer hover:scale-90"
+                                    onClick={() => handleNextContent()}
+                                />
                             </div>
 
                             <div className="mt-2 border border-gray-300 border-dashed p-4 rounded bg-red-50">
@@ -168,11 +160,15 @@ export default function CreateUpdateForm({ savedQuiz }: { savedQuiz?: SavedQuiz 
 
                                 {
                                     currentContent.type == "text" ? (
-                                        <textarea
-                                            onChange={(e) => setCurrentContent({ ...currentContent, value: e.target.value })}
-                                            value={currentContent.value}
-                                            className="border border-gray-300 w-full p-2 my-1 min-h-[100px]"
-                                        ></textarea>
+                                        <div>
+                                            <Content content={currentContent} />
+                                            <textarea
+                                                onChange={(e) => setCurrentContent({ ...currentContent, value: e.target.value })}
+                                                value={currentContent.value}
+                                                className="border border-gray-300 w-full p-2 my-1 min-h-[100px]"
+                                                placeholder="Use * for bold, __ for italic and $ for Latex"
+                                            ></textarea>
+                                        </div>
                                     ) : (
                                         <input
                                             type="text"
@@ -274,14 +270,18 @@ export default function CreateUpdateForm({ savedQuiz }: { savedQuiz?: SavedQuiz 
 
                             {
                                 currentQuestion.explanation.type == "text" ? (
-                                    <textarea
-                                        onChange={(e) => setCurrentQuestion({
-                                            ...currentQuestion,
-                                            explanation: { ...currentQuestion.explanation, value: e.target.value }
-                                        })}
-                                        value={currentQuestion.explanation.value}
-                                        className="border border-gray-300 w-full p-2 my-1 min-h-[100px]"
-                                    ></textarea>
+                                    <div>
+                                        <Content content={currentQuestion.explanation} />
+                                        <textarea
+                                            onChange={(e) => setCurrentQuestion({
+                                                ...currentQuestion,
+                                                explanation: { ...currentQuestion.explanation, value: e.target.value }
+                                            })}
+                                            value={currentQuestion.explanation.value}
+                                            className="border border-gray-300 w-full p-2 my-1 min-h-[100px]"
+                                            placeholder="Use * for bold, __ for italic and $ for Latex"
+                                        ></textarea>
+                                    </div>
                                 ) : (
                                     <input
                                         onChange={(e) => setCurrentQuestion({
