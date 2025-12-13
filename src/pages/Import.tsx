@@ -2,6 +2,7 @@ import { toast, Toaster } from "sonner";
 import Nav from "../components/Nav";
 import useQuiz from "../hooks/useQuiz";
 import { useNavigate } from "react-router-dom";
+import { URL_PATTERN } from "../utils/colors";
 
 export default function Import() {
     const quizStuff = useQuiz();
@@ -20,7 +21,7 @@ export default function Import() {
                 setTimeout(() => {
                     navigate("/");
                 }, 1000);
-            } catch(e) {
+            } catch (e) {
                 toast.error("Error");
             }
         };
@@ -30,8 +31,8 @@ export default function Import() {
 
     return (
         <div
-            className="bg-cover bg-center min-h-screen"
-            style={{ backgroundImage: `url(https://picsum.photos/id/77/1780)` }}
+            className="min-h-screen bg-neutral-500"
+            style={{ backgroundImage: URL_PATTERN }}
         >
             <Nav />
             <Toaster position="top-right" />

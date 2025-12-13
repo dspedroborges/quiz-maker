@@ -1,6 +1,7 @@
 import { useState } from "react";
 import CreateUpdateForm from "../components/CreateUpdateForm";
 import Nav from "../components/Nav";
+import { URL_PATTERN } from "../utils/colors";
 
 export default function Create() {
     const [config, setConfig] = useState({ show: false, useLLM: false });
@@ -8,8 +9,8 @@ export default function Create() {
 
     return (
         <div
-            className="bg-cover bg-center min-h-screen"
-            style={{ backgroundImage: `url(https://picsum.photos/id/77/1780)` }}
+            className="min-h-screen bg-neutral-500"
+            style={{ backgroundImage: URL_PATTERN }}
         >
             <Nav />
 

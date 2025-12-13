@@ -1,13 +1,14 @@
 import Settings, { type SettingsType } from "../components/Settings";
 import Nav from "../components/Nav";
 import { useNavigate } from "react-router-dom";
+import { URL_PATTERN } from "../utils/colors";
 
 export default function Home() {
   const navigate = useNavigate();
   return (
     <div
-      className="bg-cover bg-center min-h-screen"
-      style={{ backgroundImage: `url(https://picsum.photos/id/77/1780)` }}
+      className="min-h-screen bg-neutral-500"
+      style={{ backgroundImage: URL_PATTERN }}
     >
       <Nav />
       <div className="mt-4">

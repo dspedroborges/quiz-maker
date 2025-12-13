@@ -2,6 +2,7 @@ import Nav from "../components/Nav";
 import { useLocation, useNavigate } from "react-router-dom";
 import Quiz from "../components/Quiz";
 import { useEffect } from "react";
+import { URL_PATTERN } from "../utils/colors";
 
 export default function QuizPage() {
     const { state } = useLocation();
@@ -17,8 +18,8 @@ export default function QuizPage() {
 
     return (
         <div
-            className="bg-cover bg-center min-h-screen"
-            style={{ backgroundImage: `url(https://picsum.photos/id/77/1780)` }}
+            className="min-h-screen bg-neutral-500"
+            style={{ backgroundImage: URL_PATTERN }}
         >
             <Nav />
             <Quiz
