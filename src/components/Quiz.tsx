@@ -6,6 +6,7 @@ import { DEFAULT_PALETTE } from "../utils/colors";
 import TopBar from "./TopBar";
 import Content from "./Content";
 import { Link } from "react-router-dom";
+import TextDisplay from "./TextDisplay";
 
 export type FileType = "text" | "image" | "audio" | "video" | "youtube";
 
@@ -236,28 +237,34 @@ export default function Quiz({ allQuestions, isInfinite, isRandom, take }: Props
                                     !showExplanation && (
                                         <div className="flex flex-col justify-center items-center p-4 gap-4">
                                             <div>
-                                                <p className="text-lg font-light mb-3 text-center">{questions[currentQuestion].preStatement}</p>
-                                                <h3 className="text-xl font-bold text-center">{questions[currentQuestion].statement}</h3>
+                                                <p className="text-lg font-light mb-3 text-center">
+                                                    <TextDisplay text={questions[currentQuestion].preStatement} />
+                                                </p>
+                                                <h3 className="text-xl font-bold text-center">
+                                                    <TextDisplay text={questions[currentQuestion].statement} />
+                                                </h3>
                                             </div>
-                                            {
-                                                contents.length > 1 && (
-                                                    <BsCaretLeftFill
-                                                        className="text-3xl cursor-pointer hover:scale-90"
-                                                        onClick={() => handlePreviousContent()}
-                                                    />
-                                                )
-                                            }
-                                            <Content
-                                                content={questions[currentQuestion].content[currentContent]}
-                                            />
-                                            {
-                                                contents.length > 1 && (
-                                                    <BsCaretRightFill
-                                                        className="text-3xl cursor-pointer hover:scale-90"
-                                                        onClick={() => handleNextContent()}
-                                                    />
-                                                )
-                                            }
+                                            <div className="flex justify-between items-center">
+                                                {
+                                                    contents.length > 1 && (
+                                                        <BsCaretLeftFill
+                                                            className="text-3xl cursor-pointer hover:scale-90"
+                                                            onClick={() => handlePreviousContent()}
+                                                        />
+                                                    )
+                                                }
+                                                <Content
+                                                    content={questions[currentQuestion].content[currentContent]}
+                                                />
+                                                {
+                                                    contents.length > 1 && (
+                                                        <BsCaretRightFill
+                                                            className="text-3xl cursor-pointer hover:scale-90"
+                                                            onClick={() => handleNextContent()}
+                                                        />
+                                                    )
+                                                }
+                                            </div>
                                             {/* tips */}
                                             <div className="flex gap-2 mb-2">
                                                 {
@@ -284,15 +291,17 @@ export default function Quiz({ allQuestions, isInfinite, isRandom, take }: Props
                                         <div className="text-center w-full">
                                             <div className="p-4">
                                                 <h3 className="text-xl font-bold my-3 text-neutral-800">The right answer is:</h3>
-                                                <p className="text-2xl italic mt-4 text-green-600">{questions[currentQuestion].answer}</p>
+                                                <p className="text-2xl italic mt-4 text-green-600">
+                                                    <TextDisplay text={questions[currentQuestion].answer} />
+                                                </p>
                                                 {
                                                     questions[currentQuestion].explanation.value !== "" &&
-                                                        <>
-                                                            <h3 className="text-xl font-bold my-3 text-neutral-800">Explanation:</h3>
-                                                            <Content
-                                                                content={questions[currentQuestion].explanation}
-                                                            />
-                                                        </>
+                                                    <>
+                                                        <h3 className="text-xl font-bold my-3 text-neutral-800">Explanation:</h3>
+                                                        <Content
+                                                            content={questions[currentQuestion].explanation}
+                                                        />
+                                                    </>
                                                 }
                                             </div>
                                             {
@@ -344,7 +353,7 @@ export default function Quiz({ allQuestions, isInfinite, isRandom, take }: Props
                                                             onClick={() => handleAnswer(o)}
                                                             style={{ backgroundColor: DEFAULT_PALETTE[i < DEFAULT_PALETTE.length ? i : 0] }}
                                                         >
-                                                            {o}
+                                                            <TextDisplay text={o} />
                                                         </div>
                                                     )
                                                 })

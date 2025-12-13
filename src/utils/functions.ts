@@ -23,28 +23,34 @@ import katex from "katex";
 import "katex/dist/katex.min.css";
 
 export function parseRichText(input: string): string {
-    let output = input;
+  let output = input;
 
-    // Line breaks
-    output = output.replace(/\n/g, "<br />");
+  // Strip bold/italic wrappers around LaTeX blocks (robust)
+  output = output.replace(
+    /(?:__|\*)\s*(\$[^$]+\$)\s*(?:__|\*)/g,
+    "$1"
+  );
 
-    // Inline LaTeX: $...$
-    output = output.replace(/\$(.+?)\$/g, (_, expr) => {
-        try {
-            return katex.renderToString(expr, {
-                throwOnError: false,
-                displayMode: false,
-            });
-        } catch {
-            return _;
-        }
-    });
+  // Line breaks
+  output = output.replace(/\n/g, "<br />");
 
-    // Bold: *...*
-    output = output.replace(/\*(.+?)\*/g, `<span class="font-bold">$1</span>`);
+  // Inline LaTeX: $...$
+  output = output.replace(/\$([^$]+)\$/g, (_, expr) => {
+    try {
+      return katex.renderToString(expr, {
+        throwOnError: false,
+        displayMode: false,
+      });
+    } catch {
+      return _;
+    }
+  });
 
-    // Italic: __...__
-    output = output.replace(/__(.+?)__/g, `<span class="italic">$1</span>`);
+  // Bold (non-LaTeX only)
+  output = output.replace(/\*(?!\$)(.+?)(?<!\$)\*/g, `<span class="font-bold">$1</span>`);
 
-    return output;
+  // Italic (non-LaTeX only)
+  output = output.replace(/__(?!\$)(.+?)(?<!\$)__/g, `<span class="italic">$1</span>`);
+
+  return output;
 }

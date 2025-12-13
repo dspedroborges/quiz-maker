@@ -7,6 +7,7 @@ import { useNavigate } from "react-router-dom";
 import type { SavedQuiz } from "../hooks/useQuiz";
 import useQuiz from "../hooks/useQuiz";
 import { MdClear } from "react-icons/md";
+import TextDisplay from "./TextDisplay";
 
 const INITIAL_QUESTION: Question = {
     category: "",
@@ -107,6 +108,9 @@ export default function CreateUpdateForm({ savedQuiz }: { savedQuiz?: SavedQuiz 
                         <div>
                             <label className="font-bold block">Pre-statement<sup className="text-xs text-gray-300">(optional)</sup></label>
                             <span className="text-xs text-gray-600 mb-2 block">The pre-statement will be displayed right above the statement</span>
+                            <div className="my-2 bg-gray-200 p-2">
+                                <TextDisplay text={currentQuestion.preStatement} />
+                            </div>
                             <input
                                 onChange={(e) => setCurrentQuestion({ ...currentQuestion, preStatement: e.target.value })}
                                 value={currentQuestion.preStatement}
@@ -117,6 +121,9 @@ export default function CreateUpdateForm({ savedQuiz }: { savedQuiz?: SavedQuiz 
 
                         <div>
                             <label className="font-bold block mb-2">Statement<sup className="text-xs text-red-600">*</sup></label>
+                            <div className="my-2 bg-gray-200 p-2">
+                                <TextDisplay text={currentQuestion.statement} />
+                            </div>
                             <input
                                 onChange={(e) => setCurrentQuestion({ ...currentQuestion, statement: e.target.value })}
                                 value={currentQuestion.statement}
