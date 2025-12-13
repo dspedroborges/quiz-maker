@@ -12,9 +12,39 @@ export function shuffleArray<T>(arr: T[]): T[] {
 }
 
 export function normalizeString(str: string): string {
-  return str
-    .toLowerCase()
-    .normalize("NFD")
-    .replace(/[\u0300-\u036f]/g, "")
-    .trim();
+    return str
+        .toLowerCase()
+        .normalize("NFD")
+        .replace(/[\u0300-\u036f]/g, "")
+        .trim();
+}
+
+import katex from "katex";
+import "katex/dist/katex.min.css";
+
+export function parseRichText(input: string): string {
+    let output = input;
+
+    // Line breaks
+    output = output.replace(/\n/g, "<br />");
+
+    // Inline LaTeX: $...$
+    output = output.replace(/\$(.+?)\$/g, (_, expr) => {
+        try {
+            return katex.renderToString(expr, {
+                throwOnError: false,
+                displayMode: false,
+            });
+        } catch {
+            return _;
+        }
+    });
+
+    // Bold: *...*
+    output = output.replace(/\*(.+?)\*/g, `<span class="font-bold">$1</span>`);
+
+    // Italic: __...__
+    output = output.replace(/__(.+?)__/g, `<span class="italic">$1</span>`);
+
+    return output;
 }

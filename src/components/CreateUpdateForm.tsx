@@ -30,7 +30,7 @@ export default function CreateUpdateForm({ savedQuiz }: { savedQuiz?: SavedQuiz 
     const [currentIndexContent, setCurrentIndexContent] = useState(0);
     const [currentIndexQuestion, setCurrentIndexQuestion] = useState(0);
     const [quizName, setQuizName] = useState("");
-    const INDEX_LAST_ELEMENT = allQuestions.length - 1;
+    const INDEX_LAST_QUESTION = allQuestions.length - 1;
     const navigate = useNavigate();
     const { saved, saveQuiz } = useQuiz();
 
@@ -136,9 +136,11 @@ export default function CreateUpdateForm({ savedQuiz }: { savedQuiz?: SavedQuiz 
                                 }
                                 {
                                     currentQuestion.content.length > 0 && (
-                                        <Content
-                                            content={currentQuestion.content[currentIndexContent]}
-                                        />
+                                        <div onClick={() => setCurrentContent(currentQuestion.content[currentIndexContent])}>
+                                            <Content
+                                                content={currentQuestion.content[currentIndexContent]}
+                                            />
+                                        </div>
                                     )
                                 }
                                 {
@@ -208,6 +210,8 @@ export default function CreateUpdateForm({ savedQuiz }: { savedQuiz?: SavedQuiz 
                                                 ...currentQuestion,
                                                 content: [...currentQuestion.content].filter(c => c.value !== currentQuestion.content[currentIndexContent].value)
                                             });
+                                            setCurrentContent(INITIAL_CONTENT);
+                                            setCurrentIndexContent(0);
                                         }}
                                         type="button"
                                         className="bg-red-700 hover:bg-red-800 cursor-pointer w-full text-white py-2 mt-2 text-2xl"
@@ -368,7 +372,7 @@ export default function CreateUpdateForm({ savedQuiz }: { savedQuiz?: SavedQuiz 
                             }
 
                             {
-                                currentIndexQuestion <= INDEX_LAST_ELEMENT && (
+                                currentIndexQuestion <= INDEX_LAST_QUESTION && (
                                     <div
                                         onClick={() => {
                                             setAllQuestions([...allQuestions].filter(q => q.statement !== currentQuestion.statement));
@@ -386,7 +390,7 @@ export default function CreateUpdateForm({ savedQuiz }: { savedQuiz?: SavedQuiz 
                                 onClick={() => {
                                     let allQuestionsCopy = JSON.parse(JSON.stringify(allQuestions));
                                     // this means the currentIndexQuestion is a new question
-                                    if (currentIndexQuestion > INDEX_LAST_ELEMENT) {
+                                    if (currentIndexQuestion > INDEX_LAST_QUESTION) {
                                         if (allQuestionsCopy.find((q: Question) => q.statement == currentQuestion.statement)) {
                                             toast.error("Statement has to be unique");
                                             return;
@@ -426,7 +430,7 @@ export default function CreateUpdateForm({ savedQuiz }: { savedQuiz?: SavedQuiz 
                                         setCurrentIndexQuestion(prev => prev + 1);
                                         toast.success("Question created");
                                         // this means currentIndexQuestion is a previous question
-                                    } else if (currentIndexQuestion < INDEX_LAST_ELEMENT) {
+                                    } else if (currentIndexQuestion < INDEX_LAST_QUESTION) {
                                         allQuestionsCopy[currentIndexContent] = currentQuestion;
                                         setCurrentQuestion(allQuestions[currentIndexQuestion + 1]);
                                         setCurrentIndexQuestion(prev => prev + 1);
@@ -442,7 +446,7 @@ export default function CreateUpdateForm({ savedQuiz }: { savedQuiz?: SavedQuiz 
                                 title="Add or go forward"
                             >
                                 {
-                                    currentIndexQuestion > INDEX_LAST_ELEMENT ? <BsPlusCircle className="mx-auto" /> : <BsArrowRight className="mx-auto" />
+                                    currentIndexQuestion > INDEX_LAST_QUESTION ? <BsPlusCircle className="mx-auto" /> : <BsArrowRight className="mx-auto" />
                                 }
                             </div>
 

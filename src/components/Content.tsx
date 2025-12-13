@@ -1,4 +1,5 @@
 import type { ContentType } from "./Quiz"
+import TextDisplay from "./TextDisplay"
 
 export default function Content({ content }: { content: ContentType }) {
     return (
@@ -42,12 +43,8 @@ export default function Content({ content }: { content: ContentType }) {
 
             {
                 (content.type == "text") && (
-                    <div className="flex items-center justify-center w-full">
-                        {
-                            content.value.split("\n").map((line, i) => {
-                                return <p key={i}>{line}</p>
-                            })
-                        }
+                    <div className="flex justify-center w-full my-2">
+                        <TextDisplay text={content.value} />
                     </div>
                 )
             }
