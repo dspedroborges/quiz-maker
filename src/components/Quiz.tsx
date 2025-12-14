@@ -188,7 +188,7 @@ export default function Quiz({ allQuestions, isInfinite, isRandom, take }: Props
             <Toaster position="top-right" />
             {
                 isFinished && (
-                    <div className="bg-white rounded-xl w-1/2 fixed top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 p-8 flex flex-col gap-8 items-center justify-center">
+                    <div className="bg-white rounded-xl w-[95%] lg:w-1/2 fixed top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 p-8 flex flex-col gap-8 items-center justify-center">
                         <p className="text-xl text-green-800"><span className="font-bold">Congrats! </span>You've reached the end of it. Wanna try again?</p>
                         <ul>
                             <li className="flex items-center gap-2">
