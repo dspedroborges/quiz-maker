@@ -2,7 +2,7 @@ import { useState } from "react";
 import CreateUpdateForm from "../components/CreateUpdateForm";
 import Nav from "../components/Nav";
 import { URL_PATTERN } from "../utils/colors";
-import { useQuery } from "@tanstack/react-query";
+import { useMutation } from "@tanstack/react-query";
 import { fetchQuiz } from "../requests/fetchQuiz";
 import useQuiz from "../hooks/useQuiz";
 import { toast, Toaster } from "sonner";
@@ -14,10 +14,8 @@ export default function Create() {
     const navigate = useNavigate();
     const quizStuff = useQuiz();
 
-    const quizLLM = useQuery({
-        queryKey: ["quiz", prompt],
-        enabled: false,
-        queryFn: () => fetchQuiz(`
+    const quizMutation = useMutation({
+        mutationFn: (prompt: string) => fetchQuiz(`
             Make an array of questions about ${prompt} in the following format:
 
             type FileType = "text" | "image" | "audio" | "video" | "youtube";
@@ -54,12 +52,24 @@ export default function Create() {
             You must give your answer as a JSON. Do not say anything else.
         `),
         retry: 1,
+        onSuccess: (data) => {
+            if (!data) return;
+            quizStuff.saveQuiz(
+                quizStuff.saved,
+                {
+                    quizName: prompt,
+                    allQuestions: JSON.parse(
+                        data.replaceAll("json", "").replaceAll("```", "")
+                    ),
+                }
+            );
+            toast.success("Your quiz has been created!");
+            setTimeout(() => navigate("/"), 1000);
+        },
     });
+
     return (
-        <div
-            className="min-h-screen bg-neutral-500"
-            style={{ backgroundImage: URL_PATTERN }}
-        >
+        <div className="min-h-screen bg-neutral-500" style={{ backgroundImage: URL_PATTERN }}>
             <Nav />
             <Toaster position="top-right" />
             <div className="bg-white w-full lg:w-1/2 p-4 rounded-xl mx-auto mt-4">
@@ -80,48 +90,36 @@ export default function Create() {
                     </button>
                 </div>
 
-                {
-                    config.show && (
-                        <>
-                            {
-                                config.useLLM ? (
-                                    <>
-                                        <label htmlFor="import" className="block font-bold mt-4 mb-2 cursor-pointer">What is the quiz about?</label>
-                                        <p className="bg-red-50 p-2 rounded-xl mb-2"><strong>Disclaimer: </strong>Be aware that not always the LLM produces trustworthy content and sometimes the quizzes might appear a little broken, but you can update them.</p>
-                                        <input
-                                            id="import"
-                                            className="border border-gray-300 p-2 rounded-xl hover:bg-gray-100 w-full mb-2"
-                                            type="text"
-                                            maxLength={60}
-                                            onChange={(e) => setPrompt(e.target.value.slice(0, 60))}
-                                        />
-                                        <button
-                                            className="w-full bg-green-900 text-white hover:bg-green-800 cursor-pointer p-2"
-                                            onClick={() => {
-                                                quizLLM.refetch();
-                                                console.log(quizLLM.data);
-                                                if (quizLLM.data) {
-                                                    quizStuff.saveQuiz(quizStuff.saved, { quizName: prompt, allQuestions: JSON.parse(quizLLM.data.replaceAll("json", "").replaceAll("```", "")) });
-                                                    toast.success("Your quiz has been created!");
-                                                    setTimeout(() => {
-                                                        navigate("/");
-                                                    }, 1000);
-                                                }
-                                            }}
-                                        >
-                                            {quizLLM.isLoading ? "Creating... Please, wait" : "Create"}
-                                        </button>
-                                    </>
-                                ) : (
-                                    <CreateUpdateForm />
-                                )
-                            }
-                        </>
-                    )
-                }
-
-
+                {config.show && (
+                    <>
+                        {config.useLLM ? (
+                            <>
+                                <label htmlFor="import" className="block font-bold mt-4 mb-2 cursor-pointer">
+                                    What is the quiz about?
+                                </label>
+                                <p className="bg-red-50 p-2 rounded-xl mb-2">
+                                    <strong>Disclaimer: </strong>Be aware that not always the LLM produces trustworthy content and sometimes the quizzes might appear a little broken, but you can update them.
+                                </p>
+                                <input
+                                    id="import"
+                                    className="border border-gray-300 p-2 rounded-xl hover:bg-gray-100 w-full mb-2"
+                                    type="text"
+                                    maxLength={60}
+                                    onChange={(e) => setPrompt(e.target.value.slice(0, 60))}
+                                />
+                                <button
+                                    className="w-full bg-green-900 text-white hover:bg-green-800 cursor-pointer p-2"
+                                    onClick={() => quizMutation.mutate(prompt)}
+                                >
+                                    {quizMutation.isPending ? "Creating... Please, wait" : "Create"}
+                                </button>
+                            </>
+                        ) : (
+                            <CreateUpdateForm />
+                        )}
+                    </>
+                )}
             </div>
         </div>
-    )
+    );
 }
