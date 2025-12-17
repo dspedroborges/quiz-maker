@@ -5,6 +5,7 @@ import Create from "./pages/Create";
 import Update from "./pages/Update";
 import QuizPage from "./pages/Quiz";
 import Import from "./pages/Import";
+import CreateManually from "./pages/CreateManually";
 
 const queryClient = new QueryClient();
 
@@ -15,6 +16,7 @@ function App() {
         <Routes>
           <Route path="/" element={<Home />} />
           <Route path="/create" element={<Create />} />
+          <Route path="/create/manually" element={<CreateManually />} />
           <Route path="/update" element={<Update />} />
           <Route path="/import" element={<Import />} />
           <Route path="/quiz" element={<QuizPage />} />

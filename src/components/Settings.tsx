@@ -73,6 +73,8 @@ export default function Settings({ onSubmit }: { onSubmit: (formState: SettingsT
             <Toaster position="top-right" />
             <h3 className="text-xl text-green-800 mb-4 border-b border-gray-300 pb-2 text-center">Choose your quiz</h3>
 
+            
+
             <form onSubmit={handleSubmit} className="flex flex-col gap-4">
                 <div>
                     {
@@ -82,12 +84,8 @@ export default function Settings({ onSubmit }: { onSubmit: (formState: SettingsT
                                     key={i}
                                     className={`p-2 cursor-pointer hover:bg-green-100 flex items-center justify-between w-full ${chosenQuiz.quizName == quiz.quizName && "bg-green-200"} select-none`}
                                     onClick={() => {
-                                        if (chosenQuiz.quizName == quiz.quizName) {
-                                            setChosenQuiz({ quizName: "", allQuestions: [] })
-                                        } else {
-                                            setChosenQuiz(quiz);
-                                            setFormState({ ...formState, allQuestions: quiz.allQuestions });
-                                        }
+                                        setChosenQuiz(quiz);
+                                        setFormState({ ...formState, allQuestions: quiz.allQuestions });
                                     }}
                                 >
                                     {
@@ -144,10 +142,17 @@ export default function Settings({ onSubmit }: { onSubmit: (formState: SettingsT
                         <>
                             <div>
                                 <label className="font-bold block mb-2 cursor-pointer" htmlFor="isInfinite">Infinite:</label>
-                                <select className="border border-gray-300 w-full p-2" name="isInfinite" id="isInfinite" onChange={handleChange} required>
+                                <select
+                                    className="border border-gray-300 w-full p-2"
+                                    name="isInfinite"
+                                    id="isInfinite"
+                                    onChange={handleChange}
+                                    required
+                                    defaultValue={"false"}
+                                >
                                     <option value="">Select...</option>
                                     <option value="true">Yes</option>
-                                    <option value="false" selected>No</option>
+                                    <option value="false">No</option>
                                 </select>
                             </div>
 
@@ -161,7 +166,15 @@ export default function Settings({ onSubmit }: { onSubmit: (formState: SettingsT
                             </div>
                             <div>
                                 <label className="font-bold block cursor-pointer" htmlFor="take">Take:</label>
-                                <input className="border border-gray-300 w-full focus:outline-0 p-2" type="number" min={0} defaultValue={chosenQuiz.allQuestions.length} name="take" id="take" onChange={handleChange} required />
+                                <input
+                                    className="border border-gray-300 w-full focus:outline-0 p-2" type="number"
+                                    min={0}
+                                    value={formState.allQuestions.length}
+                                    name="take"
+                                    id="take"
+                                    onChange={handleChange}
+                                    required
+                                />
                             </div>
                             <button className="bg-green-600 hover:bg-green-800 text-white cursor-pointer px-8 py-2 rounded-lg">
                                 Start

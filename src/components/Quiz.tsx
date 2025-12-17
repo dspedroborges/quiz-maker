@@ -246,18 +246,23 @@ export default function Quiz({ allQuestions, isInfinite, isRandom, take }: Props
                                             </div>
                                             <div className="flex justify-between items-center">
                                                 {
-                                                    contents.length > 1 && (
+                                                    contents?.length > 1 && (
                                                         <BsCaretLeftFill
                                                             className="text-3xl cursor-pointer hover:scale-90"
                                                             onClick={() => handlePreviousContent()}
                                                         />
                                                     )
                                                 }
-                                                <Content
-                                                    content={questions[currentQuestion].content[currentContent]}
-                                                />
                                                 {
-                                                    contents.length > 1 && (
+                                                    questions[currentQuestion]?.content[currentContent] && (
+                                                        <Content
+                                                            content={questions[currentQuestion].content[currentContent]}
+                                                        />
+                                                    )
+                                                }
+
+                                                {
+                                                    contents?.length > 1 && (
                                                         <BsCaretRightFill
                                                             className="text-3xl cursor-pointer hover:scale-90"
                                                             onClick={() => handleNextContent()}

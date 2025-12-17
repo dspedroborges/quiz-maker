@@ -22,6 +22,7 @@ const INITIAL_QUESTION: Question = {
     mode: { name: "click" }
 };
 
+const INFO_RICHTEXT = "Use * for bold, __ for italic and $ for Latex. For example: *Hello*, __this__ is Latex: $\\frac{1}{2}$";
 const INITIAL_CONTENT: ContentType = { type: "text", value: "" };
 
 export default function CreateUpdateForm({ savedQuiz }: { savedQuiz?: SavedQuiz }) {
@@ -116,6 +117,7 @@ export default function CreateUpdateForm({ savedQuiz }: { savedQuiz?: SavedQuiz 
                                 value={currentQuestion.preStatement}
                                 className="border border-gray-300 w-full p-2"
                                 name="preStatement"
+                                placeholder={INFO_RICHTEXT}
                             />
                         </div>
 
@@ -129,6 +131,7 @@ export default function CreateUpdateForm({ savedQuiz }: { savedQuiz?: SavedQuiz 
                                 value={currentQuestion.statement}
                                 className="border border-gray-300 w-full p-2 bg-red-50"
                                 name="statement"
+                                placeholder={INFO_RICHTEXT}
                             />
                         </div>
 
@@ -180,7 +183,7 @@ export default function CreateUpdateForm({ savedQuiz }: { savedQuiz?: SavedQuiz 
                                                 onChange={(e) => setCurrentContent({ ...currentContent, value: e.target.value })}
                                                 value={currentContent.value}
                                                 className="border border-gray-300 w-full p-2 my-1 min-h-[100px]"
-                                                placeholder="Use * for bold, __ for italic and $ for Latex. For example: *Hello*, __this__ is Latex: $\frac{1}{2}$"
+                                                placeholder={INFO_RICHTEXT}
                                             ></textarea>
                                         </div>
                                     ) : (
@@ -238,7 +241,7 @@ export default function CreateUpdateForm({ savedQuiz }: { savedQuiz?: SavedQuiz 
                                 onChange={(e) => setCurrentQuestion({ ...currentQuestion, options: e.target.value.split("\n") })}
                                 value={currentQuestion.options.join("\n")}
                                 className="border border-gray-300 w-full p-2 bg-red-50"
-                                placeholder="One option per line"
+                                placeholder={`One option per line. ${INFO_RICHTEXT}`}
                             ></textarea>
                         </div>
 
@@ -249,6 +252,7 @@ export default function CreateUpdateForm({ savedQuiz }: { savedQuiz?: SavedQuiz 
                                 value={currentQuestion.answer}
                                 className="border border-gray-300 w-full p-2 bg-red-50"
                                 name="answer"
+                                placeholder={INFO_RICHTEXT}
                             />
                         </div>
 
@@ -293,7 +297,7 @@ export default function CreateUpdateForm({ savedQuiz }: { savedQuiz?: SavedQuiz 
                                             })}
                                             value={currentQuestion.explanation.value}
                                             className="border border-gray-300 w-full p-2 my-1 min-h-[100px]"
-                                            placeholder="Use * for bold, __ for italic and $ for Latex. For example: *Hello*, __this__ is Latex: $\frac{1}{2}$"
+                                            placeholder={INFO_RICHTEXT}
                                         ></textarea>
                                     </div>
                                 ) : (
@@ -315,7 +319,7 @@ export default function CreateUpdateForm({ savedQuiz }: { savedQuiz?: SavedQuiz 
                                 onChange={(e) => setCurrentQuestion({ ...currentQuestion, tips: e.target.value.split("\n") })}
                                 value={currentQuestion.tips.join("\n")}
                                 className="border border-gray-300 w-full p-2"
-                                placeholder="One tip per line"
+                                placeholder={`One tip per line. ${INFO_RICHTEXT}`}
                             ></textarea>
                         </div>
 
