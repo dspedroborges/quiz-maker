@@ -27,40 +27,44 @@ export default function Create() {
 
     const quizMutation = useMutation({
         mutationFn: (prompt: Prompt) => fetchQuiz(`
-            Make an array of questions about ${prompt.content} in the following format:
+Make an array of questions about:
 
-            type FileType = "text" | "image" | "audio" | "video" | "youtube";
+"${prompt.content}"
 
-            type ContentType = { type: FileType, value: string };
+In the following format:
 
-            type ModeType = { name: "click" } | { name: "type", answersAsSuggestions: boolean } | { name: "explanation" };
+type FileType = "text" | "image" | "audio" | "video" | "youtube";
 
-            type Question = {
-                category: string;
-                preStatement: string;
-                statement: string;
-                content: ContentType[];
-                options: string[];
-                answer: string;
-                time: number;
-                explanation: ContentType;
-                tips: string[];
-                mode: ModeType;
-            };
+type ContentType = { type: FileType, value: string };
 
-            ${prompt.useLatex ? "You may use $ to Latex. For example: $latex here$." : ""}
+type ModeType = { name: "click" } | { name: "type", answersAsSuggestions: boolean } | { name: "explanation" };
 
-            You must not show the answer in the content! You must not show the answer in the tips!
+type Question = {
+    category: string;
+    preStatement: string;
+    statement: string;
+    content: ContentType[];
+    options: string[];
+    answer: string;
+    time: number;
+    explanation: ContentType;
+    tips: string[];
+    mode: ModeType;
+};
 
-            You must not use the contents as alternatives. That's why we have the options. Contents are supposed to be used as auxiliary information or when you need to provide more details. If that's not necessary, leave them empty.
+${prompt.useLatex ? "You may use $ to Latex. For example: $latex here$." : "You may use * for bold and __ for italic. For example: *bold* and __italic__"}
 
-            One of the options must be the answer and it has to be exactly like it's written in the options!
+You must not show the answer in the content! You must not show the answer in the tips!
 
-            You have to produce ${prompt.amountQuestions <= 25 ? prompt.amountQuestions : 25} questions!
+You must not use the contents as alternatives. That's why we have the options. Contents are supposed to be used as auxiliary information or when you need to provide more details. If that's not necessary, leave them empty.
 
-            Make preference to the click mode.
-            
-            You must give your answer as a JSON. Do not say anything else.
+One of the options must be the answer and it has to be exactly like it's written in the options!
+
+You have to produce ${prompt.amountQuestions <= 25 ? prompt.amountQuestions : 25} questions!
+
+Make preference to the click mode.
+
+You must give your answer as a JSON. Do not say anything else.
         `),
         retry: 1,
         onSuccess: (data) => {
@@ -121,12 +125,10 @@ export default function Create() {
                                     <label htmlFor="import" className="block font-bold mt-4 mb-2 cursor-pointer">
                                         What is the quiz about?
                                     </label>
-                                    <input
+                                    <textarea
                                         id="import"
                                         className="border border-gray-300 p-2 rounded-xl hover:bg-gray-100 w-full mb-2"
-                                        type="text"
-                                        maxLength={60}
-                                        onChange={(e) => setPrompt({ ...prompt, content: e.target.value.slice(0, 60) })}
+                                        onChange={(e) => setPrompt({ ...prompt, content: e.target.value })}
                                     />
                                 </div>
                                 <div>
