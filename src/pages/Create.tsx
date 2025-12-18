@@ -12,6 +12,7 @@ type Prompt = {
     content: string;
     amountQuestions: number;
     useLatex: boolean;
+    useCode: boolean;
 }
 
 export default function Create() {
@@ -21,6 +22,7 @@ export default function Create() {
         content: "",
         amountQuestions: 0,
         useLatex: false,
+        useCode: false,
     });
     const navigate = useNavigate();
     const quizStuff = useQuiz();
@@ -52,7 +54,9 @@ type Question = {
     mode: ModeType;
 };
 
-${prompt.useLatex ? "You may use $ to Latex. For example: $latex here$." : "You may use * for bold and __ for italic. For example: *bold* and __italic__"}
+${prompt.useLatex ? "You may use $ to Latex. For example: $latex here$." : "You may use ** for bold and __ for italic. For example: *bold* and __italic__"}
+
+${prompt.useCode ? "You may use ```language for blocks of code" : ""}
 
 You must not show the answer in the content! You must not show the answer in the tips!
 
@@ -146,6 +150,20 @@ You must give your answer as a JSON. Do not say anything else.
                                     </select>
                                 </div>
                                 <div>
+                                    <label htmlFor="useCode" className="block font-bold mt-4 mb-2 cursor-pointer">
+                                        Use code
+                                    </label>
+                                    <select
+                                        onChange={(e) => setPrompt({ ...prompt, useCode: e.target.value == "true" })}
+                                        className="border border-gray-300 p-2 rounded-xl hover:bg-gray-100 w-full mb-2"
+                                        id="useCode"
+                                        defaultValue="false"
+                                    >
+                                        <option value="true">Yes</option>
+                                        <option value="false">No</option>
+                                    </select>
+                                </div>
+                                <div>
                                     <label htmlFor="amountQuestions" className="block font-bold mt-4 mb-2 cursor-pointer">
                                         Amount of questions
                                     </label>
@@ -167,7 +185,7 @@ You must give your answer as a JSON. Do not say anything else.
                                 </button>
                             </>
                         )
-                    }
+                        }
                     </>
                 )}
             </div>
