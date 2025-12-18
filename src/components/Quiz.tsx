@@ -8,24 +8,37 @@ import Content from "./Content";
 import { Link } from "react-router-dom";
 import TextDisplay from "./TextDisplay";
 
-export type FileType = "text" | "image" | "audio" | "video" | "youtube";
+export type FileType = "text" | "image" | "audio" | "video" | "youtube"
 
-export type ContentType = { type: FileType, value: string };
+export type ContentType = { type: FileType; value: string }
 
-export type ModeType = { name: "click" } | { name: "type", answersAsSuggestions: boolean } | { name: "explanation" };
+export type ModeType =
+    | { name: "click" }
+    | { name: "type"; answersAsSuggestions: boolean }
+    | { name: "explanation" }
 
-export type Question = {
-    category: string;
-    preStatement: string;
-    statement: string;
-    content: ContentType[];
-    options: string[];
-    answer: string;
-    time: number;
-    explanation: ContentType;
-    tips: string[];
-    mode: ModeType;
-};
+type BaseQuestion = {
+    category: string
+    preStatement?: string
+    statement: string
+    content?: ContentType[]
+    answer: string
+    time: number
+    explanation?: ContentType
+    tips?: string[]
+}
+
+export type ClickQuestion = BaseQuestion & {
+    mode: { name: "click" }
+    options: string[]
+}
+
+export type NonClickQuestion = BaseQuestion & {
+    mode: { name: "type"; answersAsSuggestions: boolean } | { name: "explanation" }
+    options?: never
+}
+
+export type Question = ClickQuestion | NonClickQuestion
 
 type Props = {
     allQuestions: Question[];
@@ -92,6 +105,7 @@ export default function Quiz({ allQuestions, isInfinite, isRandom, take }: Props
     };
 
     const handleNextContent = () => {
+        if (!contents) return;
         if (currentContent + 1 > contents.length - 1) {
             setCurrentContent(0);
         } else {
@@ -100,6 +114,7 @@ export default function Quiz({ allQuestions, isInfinite, isRandom, take }: Props
     }
 
     const handlePreviousContent = () => {
+        if (!contents) return;
         if (currentContent - 1 < 0) {
             setCurrentContent(contents.length - 1);
         } else {
@@ -237,16 +252,20 @@ export default function Quiz({ allQuestions, isInfinite, isRandom, take }: Props
                                     !showExplanation && (
                                         <div className="flex flex-col justify-center items-center p-4 gap-4">
                                             <div>
-                                                <p className="text-lg font-light mb-3 text-center">
-                                                    <TextDisplay text={questions[currentQuestion].preStatement} />
-                                                </p>
+                                                {
+                                                    questions[currentQuestion].preStatement && (
+                                                        <p className="text-lg font-light mb-3 text-center">
+                                                            <TextDisplay text={questions[currentQuestion].preStatement} />
+                                                        </p>
+                                                    )
+                                                }
                                                 <h3 className="text-xl font-bold text-center">
                                                     <TextDisplay text={questions[currentQuestion].statement} />
                                                 </h3>
                                             </div>
                                             <div className="flex justify-between items-center">
                                                 {
-                                                    contents?.length > 1 && (
+                                                    contents && contents?.length > 1 && (
                                                         <BsCaretLeftFill
                                                             className="text-3xl cursor-pointer hover:scale-90"
                                                             onClick={() => handlePreviousContent()}
@@ -254,7 +273,7 @@ export default function Quiz({ allQuestions, isInfinite, isRandom, take }: Props
                                                     )
                                                 }
                                                 {
-                                                    questions[currentQuestion]?.content[currentContent] && (
+                                                    contents && questions[currentQuestion].content && (
                                                         <Content
                                                             content={questions[currentQuestion].content[currentContent]}
                                                         />
@@ -262,7 +281,7 @@ export default function Quiz({ allQuestions, isInfinite, isRandom, take }: Props
                                                 }
 
                                                 {
-                                                    contents?.length > 1 && (
+                                                    contents && contents?.length > 1 && (
                                                         <BsCaretRightFill
                                                             className="text-3xl cursor-pointer hover:scale-90"
                                                             onClick={() => handleNextContent()}
@@ -273,7 +292,7 @@ export default function Quiz({ allQuestions, isInfinite, isRandom, take }: Props
                                             {/* tips */}
                                             <div className="flex gap-2 mb-2">
                                                 {
-                                                    questions[currentQuestion].tips.map((t, i) => {
+                                                    questions[currentQuestion].tips?.map((t, i) => {
                                                         return (
                                                             <div key={i}>
                                                                 {
@@ -300,7 +319,7 @@ export default function Quiz({ allQuestions, isInfinite, isRandom, take }: Props
                                                     <TextDisplay text={questions[currentQuestion].answer} />
                                                 </p>
                                                 {
-                                                    questions[currentQuestion].explanation.value !== "" &&
+                                                    questions[currentQuestion].explanation && questions[currentQuestion].explanation?.value !== "" &&
                                                     <>
                                                         <h3 className="text-xl font-bold my-3 text-neutral-800">Explanation:</h3>
                                                         <Content
@@ -350,7 +369,7 @@ export default function Quiz({ allQuestions, isInfinite, isRandom, take }: Props
                                     (questions[currentQuestion].mode.name == "click" && !showExplanation) && (
                                         <div className="flex">
                                             {
-                                                questions[currentQuestion].options.map((o, i) => {
+                                                questions[currentQuestion].options!.map((o, i) => {
                                                     return (
                                                         <div
                                                             key={i}
