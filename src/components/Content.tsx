@@ -2,6 +2,8 @@ import type { ContentType } from "./Quiz"
 import TextDisplay from "./TextDisplay"
 
 export default function Content({ content }: { content: ContentType }) {
+    if (!content) return;
+    
     return (
         <>
             {
