@@ -19,13 +19,13 @@ export type ModeType =
 
 type BaseQuestion = {
     category: string
-    preStatement?: string
+    preStatement: string
     statement: string
-    content?: ContentType[]
+    content: ContentType[]
     answer: string
     time: number
-    explanation?: ContentType
-    tips?: string[]
+    explanation: ContentType
+    tips: string[]
 }
 
 export type ClickQuestion = BaseQuestion & {
